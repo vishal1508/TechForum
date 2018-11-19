@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PostModelStoreContainer" CdmEntityContainer="PostEntity">
+    <EntitySetMapping Name="Domain_Table">
+      <EntityTypeMapping TypeName="PostModel.Domain_Table">
+        <MappingFragment StoreEntitySet="Domain_Table">
+          <ScalarProperty Name="domain" ColumnName="domain" />
+          <ScalarProperty Name="did" ColumnName="did" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Technology_Table">
+      <EntityTypeMapping TypeName="PostModel.Technology_Table">
+        <MappingFragment StoreEntitySet="Technology_Table">
+          <ScalarProperty Name="did" ColumnName="did" />
+          <ScalarProperty Name="technology" ColumnName="technology" />
+          <ScalarProperty Name="tid" ColumnName="tid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Subscriber_Table">
+      <EntityTypeMapping TypeName="PostModel.Subscriber_Table">
+        <MappingFragment StoreEntitySet="Subscriber_Table">
+          <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
+          <ScalarProperty Name="IsEmailVerified" ColumnName="IsEmailVerified" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="mobile" ColumnName="mobile" />
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Question_Bank_Table">
+      <EntityTypeMapping TypeName="PostModel.Question_Bank_Table">
+        <MappingFragment StoreEntitySet="Question_Bank_Table">
+          <ScalarProperty Name="tid" ColumnName="tid" />
+          <ScalarProperty Name="did" ColumnName="did" />
+          <ScalarProperty Name="CorrectAnswer" ColumnName="CorrectAnswer" />
+          <ScalarProperty Name="Option4" ColumnName="Option4" />
+          <ScalarProperty Name="Option3" ColumnName="Option3" />
+          <ScalarProperty Name="Option2" ColumnName="Option2" />
+          <ScalarProperty Name="Option1" ColumnName="Option1" />
+          <ScalarProperty Name="Question" ColumnName="Question" />
+          <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Test_Table">
+      <EntityTypeMapping TypeName="PostModel.Test_Table">
+        <MappingFragment StoreEntitySet="Test_Table">
+          <ScalarProperty Name="selectedoptions" ColumnName="selectedoptions" />
+          <ScalarProperty Name="questionids" ColumnName="questionids" />
+          <ScalarProperty Name="score" ColumnName="score" />
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="testid" ColumnName="testid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Post_Table">
+      <EntityTypeMapping TypeName="PostModel.Post_Table">
+        <MappingFragment StoreEntitySet="Post_Table">
+          <ScalarProperty Name="userid" ColumnName="userid" />
+          <ScalarProperty Name="category" ColumnName="category" />
+          <ScalarProperty Name="comments" ColumnName="comments" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="tags" ColumnName="tags" />
+          <ScalarProperty Name="content_" ColumnName="content_" />
+          <ScalarProperty Name="technology" ColumnName="technology" />
+          <ScalarProperty Name="domain" ColumnName="domain" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="postid" ColumnName="postid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

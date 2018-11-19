@@ -1,0 +1,52 @@
+﻿@model Tech_Forum.Models.Post_Table
+
+@{
+    ViewBag.Title = "BrowseBlog";
+}
+
+<h2 style="text-align:center">Categories</h2>
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <br><br><br>
+    <div class="categories" style="text-align:center">
+        @Html.CheckBox("domain", false)  ASP.NET
+        @Html.CheckBox("domain", false)  JAVA
+        @Html.CheckBox("domain", false)  MVC
+        @Html.CheckBox("domain", false)  WCF
+    </div>
+    <br><br><br>
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group" style="float:right">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="List Blogs" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<br><br>
+<div>
+    <h3>Searched Blogs List</h3>
+    <br>
+    <ul>
+        <li>Blog 1</li>
+        <br>
+        <br>
+        <li>Blog 2</li>
+        <br>
+        <br>
+        <li>Blog 3</li>
+        <br>
+        <br>
+        <li>Blog 4</li>
+        <br>
+        <br>
+    </ul>
+</div>

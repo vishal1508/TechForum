@@ -1,0 +1,47 @@
+﻿@using Tech_Forum.Models;
+@{
+    Layout = null;
+}
+@model DisplayQuestions
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Test1</title>
+</head>
+<body>
+    <form action="Test1">
+
+        @if (Model != null)
+        {
+            <table>
+                <tr>
+                    Q @Session["question"]>>> @Model.questions
+                </tr>
+
+            </table>
+            <label>@Html.RadioButton(Model.options[0], "No")@Model.options[0]</label><br />
+            <label>@Html.RadioButton(Model.options[0], "No")@Model.options[1]</label><br />
+
+            <label>@Html.RadioButton(Model.options[0], "No")@Model.options[2]</label><br />
+
+            <label>@Html.RadioButton(Model.options[0], "No")@Model.options[3]</label><br />
+
+            
+                <input type="submit" name="test1"  value="Next" />
+            
+
+
+        }
+    </form>
+
+
+
+
+
+
+
+</body>
+</html>
+

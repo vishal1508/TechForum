@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Tech Forum</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+
+        #homeimage a img {
+            display: block;
+            margin: auto;
+        }
+        .mynavbar {
+            overflow: hidden;
+            background-color: #000000;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+            .mynavbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+        .mydropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+            .mydropdown .mydropbtn {
+                font-size: 16px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 14px 16px;
+                background-color: inherit;
+                font-family: inherit;
+                margin: 0;
+            }
+
+            .mynavbar a:hover, .mydropdown:hover .mydropbtn {
+                background-color: red;
+            }
+
+
+        .mydropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .mydropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+            }
+
+                .mydropdown-content a:hover {
+                    background-color: #ddd;
+                }
+
+        .mydropdown:hover .mydropdown-content {
+            display: block;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color:#000000">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("TECH FORUM", "Index", "Post", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+
+            <div class="mynavbar">
+                @Html.ActionLink("Home", "Index", "Post")
+                <div class="mydropdown">
+                    <button class="mydropbtn">
+                        Articles
+                    </button>
+                    <div class="mydropdown-content">
+                        @Html.ActionLink("Browse By Category", "BrowseArticle", "Post")
+                        @Html.ActionLink("Post an Article", "Create", "Post")
+                    </div>
+                </div>
+                <div class="mydropdown">
+                    <button class="mydropbtn">
+                        Blogs
+                    </button>
+                    <div class="mydropdown-content">
+                        @Html.ActionLink("Browse By Category", "BrowseBlog", "Blog")
+                        @Html.ActionLink("Create a Blog", "Create", "Blog")
+                    </div>
+                </div>
+                @Html.ActionLink("Tests", "Test_List", "Test")
+     
+
+            @if (HttpContext.Current.User.Identity.Name != null && HttpContext.Current.User.Identity.Name.ToString() != "")
+            {
+                <div class="mydropdown" style="float:right">
+                    <button class="mydropbtn">
+                        @HttpContext.Current.User.Identity.Name
+                    </button>
+                    <div class="mydropdown-content">
+                        @if (Request.IsAuthenticated)
+                        {
+                            @Html.ActionLink("Manage Profile", "Details", "Subscriber")
+                            @Html.ActionLink("Logout", "Logout", "Subscriber")
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Login", "Login", "Subscriber")</li>
+                    <li>>@Html.ActionLink("Register", "Registration", "Subscriber")</li>
+                </ul>
+            }
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer style="float:right">
+            <p>&copy; @DateTime.Now.Year - Tech Forum</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
