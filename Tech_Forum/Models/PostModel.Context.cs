@@ -28,8 +28,8 @@ namespace Tech_Forum.Models
         public virtual DbSet<Domain_Table> Domain_Table { get; set; }
         public virtual DbSet<Technology_Table> Technology_Table { get; set; }
         public virtual DbSet<Subscriber_Table> Subscriber_Table { get; set; }
+        public virtual DbSet<Post_Table> Post_Table { get; set; }
         public virtual DbSet<Question_Bank_Table> Question_Bank_Table { get; set; }
         public virtual DbSet<Test_Table> Test_Table { get; set; }
-        public virtual DbSet<Post_Table> Post_Table { get; set; }
     }
 }

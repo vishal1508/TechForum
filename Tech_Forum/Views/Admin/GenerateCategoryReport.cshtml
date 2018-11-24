@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "GenerateCategoryReport";
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <p style="width:10px;font-size:20px;"> DOMAIN  </p>
+            <br />
+            <br />
+            <input type="checkbox" name="vehicle1" value="Web Technology"> Cryptography,<br>
+            <input type="checkbox" name="vehicle2" value="Data Structures"> Data Structures<br>
+            <input type="checkbox" name="vehicle3" value="DBMS" checked> Provable Security of Cryptographic<br>
+        </div>
+        <div class="col-sm-3">
+            <p style="width:10px;font-size:20px;">  TECHNOLOGY </p>
+            <br />
+            <br />
+            <input type="checkbox" name="vehicle1" value=".NET"> Cryptography,<br>
+            <input type="checkbox" name="vehicle2" value="Linked List"> Data Structures<br>
+            <input type="checkbox" name="vehicle3" value="RDBMS" checked> Provable Security of Cryptographic<br>
+            <br />
+            <br />
+            <br />
+            <script type="text/javascript">
+                function showDiv(toggle) {
+                    document.getElementById(toggle).style.display = 'block';
+                }
+            </script>
+
+            <input type="button" name="answer" value="List Statistics" onclick="showDiv('toggle')">
+        </div>
+        <div class="col-sm-3">
+            <p style="width:10px;font-size:20px;"> ARTICLE </p>
+            <br />
+            <br />
+            <input type="checkbox" name="vehicle1" value="Cryptography"> Cryptography,<br>
+            <input type="checkbox" name="vehicle2" value="Data Structures"> Data Structures<br>
+            <input type="checkbox" name="vehicle3" value="Provable Security of Cryptographic" checked> Provable Security of Cryptographic<br>
+
+        </div>
+        <div class="col-sm-3">
+            <p style="width:10px;font-size:20px;"> BLOG </p>
+            <br />
+            <br />
+            <input type="checkbox" name="vehicle1" value="Cryptography"> Cryptography,<br>
+            <input type="checkbox" name="vehicle2" value="Data Structures">Data Structures<br>
+            <input type="checkbox" name="vehicle3" value="Provable Security of Cryptographic" checked> Provable Security of Cryptographic<br>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+
+<div id="toggle" style="display:none">
+
+
+    <h3>Total No of Hits</h3>
+    <br />
+    <h3>43005</h3>
+    <br />
+    <br />
+    <br />
+    <br />
+    <h3>Rating</h3>
+    <br />
+    <h3>3</h3>
+    <br />
+    <br />
+    <br />
+    <br />
+    <h3>Total No of Topics</h3>
+    <br />
+    <h3>Highest Viewed Topic</h3>
+    <br />
+
+</div>
+
+
+

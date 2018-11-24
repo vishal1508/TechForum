@@ -155,10 +155,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\SubscriberController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Crypto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -192,6 +193,7 @@
     <Compile Include="Models\Post_Table.cs">
       <DependentUpon>PostModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\QuestionBank.cs" />
     <Compile Include="Models\Question_Bank_Table.cs">
       <DependentUpon>PostModel.tt</DependentUpon>
     </Compile>
@@ -202,6 +204,7 @@
     <Compile Include="Models\Technology_Table.cs">
       <DependentUpon>PostModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TestUser.cs" />
     <Compile Include="Models\Test_Table.cs">
       <DependentUpon>PostModel.tt</DependentUpon>
     </Compile>
@@ -217,6 +220,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\2.jpeg" />
+    <Content Include="Images\home.jpg" />
     <Content Include="Models\PostModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PostModel.Context.cs</LastGenOutput>
@@ -269,16 +274,22 @@
     <Content Include="Views\Subscriber\Registration.cshtml" />
     <Content Include="Views\Subscriber\VerifyAccount.cshtml" />
     <Content Include="Views\Subscriber\Login.cshtml" />
-    <Content Include="Views\Test\Index.cshtml" />
-    <Content Include="Views\Test\Test1.cshtml" />
-    <Content Include="Views\Test\Test_List.cshtml" />
-    <Content Include="Views\Test\Test_Result.cshtml" />
-    <Content Include="Views\Post\UserBlog.cshtml" />
-    <Content Include="Views\Post\UserArticle.cshtml" />
+    <Content Include="Views\Post\ResultView.cshtml" />
+    <Content Include="Views\Subscriber\ManageUser.cshtml" />
+    <Content Include="Views\Subscriber\EditPost.cshtml" />
+    <Content Include="Views\Subscriber\DeletePost.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\ReviewTest.cshtml" />
+    <Content Include="Views\User\TakeTest.cshtml" />
+    <Content Include="Views\User\TestPage.cshtml" />
+    <Content Include="Views\User\TestResult.cshtml" />
+    <Content Include="Views\Admin\GenerateCategoryReport.cshtml" />
+    <Content Include="Views\Admin\GenerateOverallReport.cshtml" />
+    <Content Include="Views\Admin\GenerateTestReport.cshtml" />
+    <Content Include="Views\Admin\GenerateUserReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

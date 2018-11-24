@@ -9,13 +9,16 @@
         <EntityTypeShape EntityType="PostModel.Technology_Table" Width="1.5" PointX="5.625" PointY="1" />
         <AssociationConnector Association="PostModel.FK_Technology_Table_Domain_Table" />
         <EntityTypeShape EntityType="PostModel.Subscriber_Table" Width="1.5" PointX="3.375" PointY="3.75" />
-        <EntityTypeShape EntityType="PostModel.Question_Bank_Table" Width="1.5" PointX="8.25" PointY="0.75" />
-        <EntityTypeShape EntityType="PostModel.Test_Table" Width="1.5" PointX="0.75" PointY="6.125" />
-        <AssociationConnector Association="PostModel.FK_Question_Bank_Table_Domain_Table" />
-        <AssociationConnector Association="PostModel.FK_Question_Bank_Table_Technology_Table" />
         <EntityTypeShape EntityType="PostModel.Post_Table" Width="1.5" PointX="5.625" PointY="4.5" />
         <AssociationConnector Association="PostModel.FK_Post_Table_Post_Table" />
-      </Diagram>
+        <EntityTypeShape EntityType="PostModel.Question_Bank_Table" Width="1.5" PointX="8" PointY="0.75" />
+        <AssociationConnector Association="PostModel.FK__Question___Domai__59FA5E80" />
+        <AssociationConnector Association="PostModel.FK__Question___Techn__5AEE82B9" />
+        <EntityTypeShape EntityType="PostModel.Test_Table" Width="1.5" PointX="7.875" PointY="4.5" />
+        <AssociationConnector Association="PostModel.FK__Test_Tabl__Domai__59063A47" />
+        <AssociationConnector Association="PostModel.FK__Test_Tabl__UserI__5CD6CB2B" />
+        <AssociationConnector Association="PostModel.FK__Test_Tabl__Techn__571DF1D5" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

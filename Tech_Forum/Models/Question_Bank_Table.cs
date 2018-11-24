@@ -16,13 +16,10 @@ namespace Tech_Forum.Models
     {
         public int QuestionID { get; set; }
         public string Question { get; set; }
-        public string Option1 { get; set; }
-        public string Option2 { get; set; }
-        public string Option3 { get; set; }
-        public string Option4 { get; set; }
+        public string Options { get; set; }
         public string CorrectAnswer { get; set; }
-        public int did { get; set; }
-        public int tid { get; set; }
+        public int DomainId { get; set; }
+        public int TechnologyId { get; set; }
     
         public virtual Domain_Table Domain_Table { get; set; }
         public virtual Technology_Table Technology_Table { get; set; }

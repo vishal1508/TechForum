@@ -1,0 +1,88 @@
+﻿@using Tech_Forum.Controllers
+@using Tech_Forum.Models
+@model TestUser
+@{
+    ViewBag.Title = "GenerateUserReport";
+}
+<style>
+    body {
+        background-image: url(../../Images/blue.jpg);
+        background-repeat: no-repeat;
+        background-size: 8000px;
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+
+        </div>
+        <div class="col-sm-6 jumbotron">
+            <br />
+            <br />
+            <br />
+            <form action="GenerateUserReport">
+                Username:<input type="text" name="inp" style=" width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;" />
+                <br />
+                <br />
+
+
+                <input type="submit" name="answer" value="Search" class="btn btn-default btn-primary">
+                <br />
+                <br />
+                <br />
+                
+
+
+                @if (Model != null)
+                {
+
+                    <br />
+                    <br />
+                    <br />
+                    <h4>Total Number of Articles published by User</h4>
+                    <BR />
+                    <BR />
+                    <h4>@Model.countarticle</h4>
+                    <br />
+                    <br />
+                    <h4>Average Rating of The User</h4>
+                    <br />
+                    <br />
+                    <h4>@Model.averagerating</h4>
+                    <br />
+                    <br />
+                    <h4>Total number of tests</h4>
+                    <br />
+                    <br />
+                    <h4>@Model.counttest</h4>
+                    <br />
+                    <br />
+                    <h4>Total number of blogs</h4>
+                    <br />
+                    <br />
+                    <h4>@Model.countarticle</h4>
+                    <br />
+                    <br />
+                    <h6>Total number of tests passed</h6>
+                    <br />
+                    <br />
+                    <h4>@Model.pass</h4>
+                    <h4>Total number of tests failed</h4>
+                    <br />
+                    <br />
+                    <h4>@Model.fail</h4>
+                }
+
+            </form>
+        </div>
+        <div class="col-sm-3">
+           
+        </div>
+    </div>
+</div>

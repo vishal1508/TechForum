@@ -20,11 +20,49 @@ namespace Tech_Forum.Controllers
         // GET: Blog/Details/5
         public ActionResult Details(int id)
         {
+            
             return View();
         }
         [Authorize]
         public ActionResult BrowseBlog()
         {
+            using (PostEntity pe = new PostEntity())
+            {
+                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
+                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult BrowseBlog(Post_Table post)
+        {
+            using (PostEntity pe = new PostEntity())
+            {
+                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
+                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+
+                int did = Convert.ToInt32(post.domain);
+                int tid = Convert.ToInt32(post.technology);
+                var d = pe.Domain_Table.Where(x => x.did == did).FirstOrDefault();
+                post.domain = d.domain;
+                var t = pe.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
+                post.technology = t.technology;
+
+
+                List<Post_Table> browseblog = pe.Post_Table.Where(x => x.domain == post.domain && x.technology == post.technology && x.category == false).ToList();
+                if (browseblog.Count > 0)
+                {
+                    ViewData["browseblog"] = browseblog;
+                }
+                else
+                {
+                    ViewData["browseblog"] = null;
+                    ViewBag.Message = "No blog found";
+                }
+            }
+
             return View();
         }
 
@@ -95,12 +133,12 @@ namespace Tech_Forum.Controllers
                         post.date = DateTime.Now;
                         post.category = false;
                         post.userid = Session["userid"].ToString();
-
+                        ViewData["Blog"] = post;
                         pe.Post_Table.Add(post);
 
 
                         pe.SaveChanges();
-                        return RedirectToAction("Index", "Post");
+                        return View("../Post/ResultView");
                     }
                     
 

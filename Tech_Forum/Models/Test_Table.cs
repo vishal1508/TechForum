@@ -14,10 +14,15 @@ namespace Tech_Forum.Models
     
     public partial class Test_Table
     {
-        public int testid { get; set; }
-        public int userid { get; set; }
-        public int score { get; set; }
-        public string questionids { get; set; }
-        public string selectedoptions { get; set; }
+        public int TestId { get; set; }
+        public string UserId { get; set; }
+        public string SelectedOptions { get; set; }
+        public int Score { get; set; }
+        public int DomainID { get; set; }
+        public int TechnologyID { get; set; }
+    
+        public virtual Domain_Table Domain_Table { get; set; }
+        public virtual Subscriber_Table Subscriber_Table { get; set; }
+        public virtual Technology_Table Technology_Table { get; set; }
     }
 }

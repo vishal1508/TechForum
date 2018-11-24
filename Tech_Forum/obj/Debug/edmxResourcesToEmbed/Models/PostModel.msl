@@ -33,32 +33,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Question_Bank_Table">
-      <EntityTypeMapping TypeName="PostModel.Question_Bank_Table">
-        <MappingFragment StoreEntitySet="Question_Bank_Table">
-          <ScalarProperty Name="tid" ColumnName="tid" />
-          <ScalarProperty Name="did" ColumnName="did" />
-          <ScalarProperty Name="CorrectAnswer" ColumnName="CorrectAnswer" />
-          <ScalarProperty Name="Option4" ColumnName="Option4" />
-          <ScalarProperty Name="Option3" ColumnName="Option3" />
-          <ScalarProperty Name="Option2" ColumnName="Option2" />
-          <ScalarProperty Name="Option1" ColumnName="Option1" />
-          <ScalarProperty Name="Question" ColumnName="Question" />
-          <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Test_Table">
-      <EntityTypeMapping TypeName="PostModel.Test_Table">
-        <MappingFragment StoreEntitySet="Test_Table">
-          <ScalarProperty Name="selectedoptions" ColumnName="selectedoptions" />
-          <ScalarProperty Name="questionids" ColumnName="questionids" />
-          <ScalarProperty Name="score" ColumnName="score" />
-          <ScalarProperty Name="userid" ColumnName="userid" />
-          <ScalarProperty Name="testid" ColumnName="testid" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Post_Table">
       <EntityTypeMapping TypeName="PostModel.Post_Table">
         <MappingFragment StoreEntitySet="Post_Table">
@@ -73,6 +47,30 @@
           <ScalarProperty Name="domain" ColumnName="domain" />
           <ScalarProperty Name="title" ColumnName="title" />
           <ScalarProperty Name="postid" ColumnName="postid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Question_Bank_Table">
+      <EntityTypeMapping TypeName="PostModel.Question_Bank_Table">
+        <MappingFragment StoreEntitySet="Question_Bank_Table">
+          <ScalarProperty Name="TechnologyId" ColumnName="TechnologyId" />
+          <ScalarProperty Name="DomainId" ColumnName="DomainId" />
+          <ScalarProperty Name="CorrectAnswer" ColumnName="CorrectAnswer" />
+          <ScalarProperty Name="Options" ColumnName="Options" />
+          <ScalarProperty Name="Question" ColumnName="Question" />
+          <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Test_Table">
+      <EntityTypeMapping TypeName="PostModel.Test_Table">
+        <MappingFragment StoreEntitySet="Test_Table">
+          <ScalarProperty Name="TechnologyID" ColumnName="TechnologyID" />
+          <ScalarProperty Name="DomainID" ColumnName="DomainID" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="SelectedOptions" ColumnName="SelectedOptions" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="TestId" ColumnName="TestId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -1,0 +1,86 @@
+﻿@using Tech_Forum.Models
+@model TestUser
+@{
+    ViewBag.Title = "GenerateTestReport";
+
+}
+<style>
+    body {
+        background-image: url(../../Images/blue.jpg);
+        background-repeat: no-repeat;
+        background-size: 8000px;
+    }
+</style>
+<h2 style="color:white;text-align:center;font-style:initial">TestReport</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+           
+        </div>
+        <div class="col-sm-6 jumbotron">
+            <br />
+
+            <br />
+            <br />
+            <form action="GenerateTestReport">
+              
+                <br />
+                <br />
+                <br />
+                             @Html.DropDownList("Domainlist1", ViewBag.domainlistname as SelectList, "select domain");
+                <br />
+                <br />
+                @if (Model != null)
+                {
+                    if (Model.count > 0)
+                    {
+                        <br />
+                        <br />
+                        <br />
+                        <BR />
+                        <h3>Details of the test</h3>
+                        <br />
+                        <br />
+                        <table border="1" style="width:300px;height:100px" class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th style="text-align:center">SLNO</th>
+                                    <th style="text-align:center">TESTID</th>
+                                    <th style="text-align:center">USERID</th>
+                                    <th style="text-align:center">DOMAIN</th>
+                                    <th style="text-align:center">SCORE</th>
+                                </tr>
+                            </thead>
+
+                            @for (int i = 0; i < Model.count; i++)
+                            {
+                            <tr>
+                                <td>@(i+1)</td>
+                                <td >@Model.TestId[i]  </td>
+                                <td >@Model.UserId[i]  </td>
+                                <td >@Model.Domainlist[i]</td>
+                                <td >@Model.Score[i]</td>
+                            </tr>
+                            }
+
+                        </table>
+                        <br />
+                        <h3>Total number of tests in the Domain</h3>
+                        <br />
+                        <br />
+                        <h5>@Model.count</h5>
+                    }
+                }
+            </form>
+            <br />
+            <br />
+
+           
+        </div>
+        <div class="col-sm-3">
+
+        </div>
+    </div>
+</div>
+

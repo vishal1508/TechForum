@@ -58,7 +58,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Post.content_, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Post.content_, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Post.content_, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Post.content_, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -77,7 +77,7 @@
 
 <script>
     $(document).ready(function () {
-        $("#tid").click(function () {
+        $("#tid").focus(function () {
 
             $.get("/Post/GetTechList", { did: $("#did").val() }, function (data) {
 

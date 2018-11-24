@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Tech_Forum.Models;
+
 namespace Tech_Forum.Controllers
 {
     public class PostController : Controller
@@ -24,8 +25,47 @@ namespace Tech_Forum.Controllers
         [Authorize]
         public ActionResult BrowseArticle()
         {
+            using (PostEntity pe = new PostEntity())
+            {
+                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
+                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+            }
             return View();
         }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult BrowseArticle(Post_Table post)
+        {
+            using (PostEntity pe = new PostEntity())
+            {
+                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
+                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+
+                int did = Convert.ToInt32(post.domain);
+                int tid = Convert.ToInt32(post.technology);
+                var d = pe.Domain_Table.Where(x => x.did == did).FirstOrDefault();
+                post.domain = d.domain;
+                var t = pe.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
+                post.technology = t.technology;
+
+
+                List<Post_Table> browsearticle = pe.Post_Table.Where(x => x.domain == post.domain && x.technology == post.technology && x.category == true).ToList();
+                if (browsearticle.Count > 0)
+                {
+                    ViewData["browsearticle"] = browsearticle;
+                }
+                else
+                {
+                    ViewData["browsearticle"] = null;
+                    ViewBag.Message = "No article found";
+                }
+            }
+
+
+            return View();
+        }
+
         // GET: Post/Create
         [Authorize]
         public ActionResult Create()
@@ -88,9 +128,11 @@ namespace Tech_Forum.Controllers
                         post.category = true;
                         post.userid = Session["userid"].ToString();
 
+                        ViewData["Article"] = post;
                         pe.Post_Table.Add(post);
                         pe.SaveChanges();
-                        return View("UserArticle", post);
+                        
+                        return View("ResultView");
                     }
                    
                 }
@@ -102,6 +144,34 @@ namespace Tech_Forum.Controllers
                 return View();
             }
         }
+
+        //Function to calculate ratings
+        public ActionResult CalculateStar(string rate)
+        {
+            return View("Index");
+        }
+
+        //To search for the post/author/tags based on input
+        public ActionResult SearchPost(string term)
+        {
+            using (PostEntity pe = new PostEntity())
+            {
+                List<Post_Table> searchlist = pe.Post_Table.Where(x => x.tags.Contains(term) || x.title.Contains(term) || x.userid.Contains(term)).ToList();
+
+                if (searchlist.Count > 0)
+                {
+                    ViewData["searchlist"] = searchlist;
+                }
+                else
+                {
+                    ViewData["searchlist"] = null;
+                    ViewBag.SearchMessage = "No results found";
+                }
+               
+            }
+            return View("ResultView");
+        }
+
 
         // GET: Post/Edit/5
         [Authorize]

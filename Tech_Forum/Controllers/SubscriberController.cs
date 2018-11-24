@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using Tech_Forum.Models;
 using System.IO;
 using System.Web.Security;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
 
 namespace Tech_Forum.Controllers
 {
@@ -70,10 +72,11 @@ namespace Tech_Forum.Controllers
                                 stream.WriteLine("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
                             }
                         }
+                        stream.Close();
                     }
                     finally
                     {
-                        stream.Close();
+                        //stream.Close();
                     }
 
 
@@ -162,7 +165,7 @@ namespace Tech_Forum.Controllers
                         }
                         else
                         {
-                            return RedirectToAction("Index", "Post");
+                            return RedirectToAction("ManageUser");
                         }
                     }
                     else
@@ -188,7 +191,133 @@ namespace Tech_Forum.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Post");
         }
-        
+
+        //Manage User action
+        [Authorize]
+        public ActionResult ManageUser()
+        {
+            using (PostEntity pe = new PostEntity())
+            {
+                string userid = Session["userid"].ToString();
+                List<Post_Table> article = pe.Post_Table.Where(x => x.userid.Equals(userid) && x.category == true).ToList();
+                List<Post_Table> blog = pe.Post_Table.Where(x => x.userid.Equals(userid) && x.category == false).ToList();
+                ViewData["Articles"] = article;
+                ViewData["Blogs"] = blog;
+
+                return View();
+            }
+               
+        }
+
+
+        // GET: Subscriber/EditPost/5
+        [Authorize]
+        public ActionResult EditPost(int id)
+        {
+
+            using (PostEntity pe = new PostEntity())
+            {
+                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
+                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+                var post = pe.Post_Table.Where(x => x.postid == id).FirstOrDefault();
+                return View(post);
+            }
+        }
+
+        // POST: Subscriber/EditPost/5
+        [HttpPost]
+        [Authorize]
+        public ActionResult EditPost(int id, Post_Table post)
+        {
+            StreamWriter stream = null;
+            using (PostEntity pe = new PostEntity())
+            {
+                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
+                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+            }
+            try
+            {
+                using (PostEntity pe = new PostEntity())
+                {
+                    //Get all the values of article/blog
+                    var postvalues = pe.Post_Table.Where(x => x.postid == id).FirstOrDefault();
+
+                    //set all the values
+                    post.postid = postvalues.postid;
+                    post.date = postvalues.date;
+                    post.category = postvalues.category;
+                    post.userid = postvalues.userid;
+
+                    int did = Convert.ToInt32(post.domain);
+                    int tid = Convert.ToInt32(post.technology);
+                    var d = pe.Domain_Table.Where(x => x.did == did).FirstOrDefault();
+                    post.domain = d.domain;
+                    var t = pe.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
+                    post.technology = t.technology;
+                    post.userid = Session["userid"].ToString();
+                    ViewData["Article"] = post;
+                    pe.Post_Table.AddOrUpdate(post);
+                    pe.SaveChanges();
+          
+                }
+                return View("../Post/ResultView");
+            }
+            catch(Exception e)
+            {
+                stream = new StreamWriter(@"D:/EditException.txt");
+                stream.WriteLine(e);
+                stream.Close();
+                return View();
+            }
+        }
+
+        //GET : Delete Post
+        [Authorize]
+        public ActionResult DeletePost(int id)
+        {
+            using (PostEntity pe = new PostEntity())
+            {
+                return View(pe.Post_Table.Where(x => x.postid == id).FirstOrDefault());
+            }
+        }
+
+        //POST : Delete Post
+        [HttpPost]
+        [Authorize]
+        public ActionResult DeletePost(int id,FormCollection form)
+        {
+            try
+            {
+                using (PostEntity pe = new PostEntity())
+                {
+                    Post_Table post = pe.Post_Table.Where(x => x.postid == id).FirstOrDefault();
+                    pe.Post_Table.Remove(post);
+                    pe.SaveChanges();
+                }
+
+                return RedirectToAction("ManageUser");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+
+        //Details
+        [Authorize]
+        public ActionResult Details(int id)
+        {
+            using (PostEntity pe = new PostEntity())
+            {
+                Post_Table post = pe.Post_Table.Where(x => x.postid == id).FirstOrDefault();
+                ViewData["Article"] = post;
+                return View("../Post/ResultView");
+            }
+             
+        }
+
         [NonAction]
         public bool IsEmailExist(string emailid)
         {
@@ -207,7 +336,7 @@ namespace Tech_Forum.Controllers
 
             var fromEmail = new MailAddress("vkvishal1508@gmail.com", "Tech Forum");
             var toEmail = new MailAddress(emailid);
-            var fromEmailPassword = "";
+            var fromEmailPassword = "Vkvishal@@@1508108254";
             string subject = "Your account is successfully created !";
 
             string body = "<br/><br/> We are excited to tell you that your Tech Forum account is " 

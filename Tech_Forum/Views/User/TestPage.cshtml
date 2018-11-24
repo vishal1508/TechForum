@@ -1,0 +1,127 @@
+﻿<script type="text/javascript" src="jquery.numberformatter-1.2.2.min.js"></script>
+@using Tech_Forum.Models
+@model List<QuestionBank>
+@{
+    ViewBag.Title = "TestPage";
+    var endTime = DateTime.UtcNow.AddSeconds(130);
+    var timeRemaining = TimeSpan.FromTicks(endTime.Ticks - DateTime.UtcNow.Ticks).TotalSeconds;
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    body {
+        background-image: url(../../Images/blue.jpg);
+        background-repeat: no-repeat;
+        background-size:8000px;
+    }
+</style>
+
+<h2 style="text-align:center;color:white;">Test Begins</h2>
+<br />
+<br />
+
+
+
+
+<form action="TakeTest" id="myform" name="myform">
+    <div id="one">
+        <div class="row">
+            <div style="font-family:'Times New Roman', Times, serif;font-size:25px;text-align:right;color:white;">No of Questions:10&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspTime Remaianing:<span id="minRemaining"></span>:<span id="secRemaining"></span></div>
+
+
+
+        </div>
+
+        @if (Model != null)
+        {
+
+
+            <!--Page to select the options of the test -->
+
+            foreach (QuestionBank q in Model)
+            {
+                <div id="list" class="jumbotron">
+                    <fieldset>
+                        @if (q.qno > 0)
+                        {
+                            <h4>@q.qno.@q.Question</h4>
+
+                            <br />
+                            <br />
+
+                            <h4><input type="radio" name="_@q.qno" value="@q.Options[0]" />@q.Options[0]</h4>
+                            <br />
+                            <h4><input type="radio" name="_@q.qno" value="@q.Options[1]" />@q.Options[1]</h4>
+                            <br />
+                            <h4><input type="radio" name="_@q.qno" value="@q.Options[2]" />@q.Options[2]</h4>
+                            <br />
+                            <h4><input type="radio" name="_@q.qno" value="@q.Options[3]" />@q.Options[3]</h4>
+                            <br />
+
+
+                        }
+                    </fieldset>
+                </div>
+            }
+
+        }
+    </div>
+    <!--submit the test before or aftertimeout-->
+    <div id="two" style="display:none">
+
+        <h2>Submit to check score</h2>
+
+    </div>
+    <input type="submit" class="btn btn-default btn-primary" name="checkscore" value="submit" style="text-align:center" />
+
+
+
+</form>
+
+<!--Script for timer-->
+<script>
+    var remSeconds =@timeRemaining;
+    var secondsCounter = remSeconds % 60;
+
+    function formatNumber(number) {
+        if (number < 10) return '0' + number;
+        else return '' + number;
+    }
+    function startTick() {
+        document.getElementById('secRemaining').innerText = formatNumber(secondsCounter);
+        document.getElementById('minRemaining').innerText = formatNumber(parseInt(remSeconds/60));
+
+        var _tick = setInterval(function () {
+            if (secondsCounter == 0)
+                secondsCounter = 60;
+            if (remSeconds > 0) {
+                remSeconds = remSeconds-1;
+                secondsCounter = secondsCounter-1;
+                document.getElementById('secRemaining').innerText = formatNumber(secondsCounter);
+                document.getElementById('minRemaining').innerText = formatNumber(parseInt(remSeconds / 60));
+
+
+            }
+            else {
+                alert('Your time has expired');
+                document.getElementById('one').style.display = 'none';
+                document.getElementById('two').style.display = 'block';
+                $("myform").attr("action", '@Url.Action("TakeTest","User")');
+                $("myform").submit();
+                clearInterval(_tick);
+                 }
+
+
+            }, 1000);
+    }
+startTick();
+
+</script>
+
+
+
+
+
+
+
+
+
