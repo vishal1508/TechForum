@@ -1,0 +1,106 @@
+﻿@using Tech_Forum.Models
+
+@{
+    ViewBag.Title = "ManageUser";
+    var Articles = (IEnumerable<Post_Table>)ViewData["Articles"];
+    var Blogs = (IEnumerable<Post_Table>)ViewData["Blogs"];
+}
+<br/>
+<div class="jumbotron text-center">
+    <h3>Your Articles and Blogs</h3>
+</div>
+
+<br/>
+
+<h4 style="font-weight:bold">Articles</h4>
+
+@if (Articles != null)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Title")
+            </th>
+            <th>
+                @Html.DisplayName("Domain")
+            </th>
+            <th>
+                @Html.DisplayName("Technology")
+            </th>
+            <th>
+                @Html.DisplayName("Ratings")
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Articles)
+        {
+        <tr>
+            <td>
+                @Html.ActionLink(item.title, "Details", new { id = item.postid })
+            </td>
+            <td>
+                @Html.DisplayName(item.domain)
+            </td>
+            <td>
+                <p>@item.technology</p>
+            </td>
+            <td>
+                @Html.DisplayName(item.rating.ToString())
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditPost", new { id = item.postid }) |
+                @Html.ActionLink("Delete", "DeletePost", new { id = item.postid })
+            </td>
+        </tr>
+        }
+
+    </table>
+}
+
+<br/>
+<h4 style="font-weight:bold">Blogs</h4>
+
+@if (Blogs != null)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Title")
+            </th>
+            <th>
+                @Html.DisplayName("Domain")
+            </th>
+            <th>
+                @Html.DisplayName("Technology")
+            </th>
+            <th>
+                @Html.DisplayName("Ratings")
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Blogs)
+        {
+        <tr>
+            <td>
+                @Html.ActionLink(item.title, "Details", new { id = item.postid })
+            </td>
+            <td>
+                @Html.DisplayName(item.domain)
+            </td>
+            <td>
+                <p>@item.technology</p> 
+            </td>
+            <td>
+                @Html.DisplayName(item.rating.ToString())
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditPost", new { id = item.postid }) |
+                @Html.ActionLink("Delete", "DeletePost", new { id = item.postid })
+            </td>
+        </tr>
+        }
+
+    </table>
+}

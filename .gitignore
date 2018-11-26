@@ -3,3 +3,8 @@
 ################################################################################
 
 /Tech_Forum/.vs/Tech_Forum/v15
+/Tech_Forum/packages
+/Tech_Forum/Tech_Forum/obj/Release/Package/PackageTmp/Scripts
+/Tech_Forum/Tech_Forum/obj/Release/Package/PackageTmp/Images
+/Tech_Forum/Tech_Forum/obj/Release/Package/PackageTmp/Views/Admin
+/Tech_Forum/Tech_Forum/obj/Release/Package/PackageTmp/Views/Shared

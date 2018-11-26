@@ -190,6 +190,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PostModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\PostParentModel.cs" />
     <Compile Include="Models\Post_Table.cs">
       <DependentUpon>PostModel.tt</DependentUpon>
     </Compile>
@@ -249,6 +250,8 @@
     <Content Include="Models\PostModel.edmx.diagram">
       <DependentUpon>PostModel.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\tech-forum - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\tech-forum - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

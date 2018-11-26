@@ -1,10 +1,25 @@
 ﻿@using Tech_Forum.Models
+@model Tech_Forum.Models.PostParentModel
 @{
     var article = (Post_Table)ViewData["Article"];
 
     var blog = (Post_Table)ViewData["Blog"];
 
     var searchresult = (IEnumerable<Post_Table>)ViewData["searchlist"];
+
+    var articleComments = (Article)ViewData["ArticleComments"];
+    var blogComments = (Blog)ViewData["BlogComments"];
+
+    var postId = 0;
+
+    if (article == null)
+    {
+        postId = blog.postid;
+    }
+    else
+    {
+        postId = article.postid;
+    }
 }
 
 <style>
@@ -47,7 +62,109 @@
         .rate > label:hover ~ input:checked ~ label {
             color: #c59b08;
         }
+
+
+    .commentDiv {
+        width: 200px;
+        border-bottom: white;
+        border-bottom-style: solid;
+        margin-left: 0px;
+    }
+
+    .commentTextBox {
+        resize: none;
+    }
+
+    .commentButton {
+        margin-top: 10px;
+        height: 30px;
+    }
+
+    .postCommentDiv {
+        width: 280px;
+        height: auto;
+        margin-left: 5px;
+        text-align: right;
+    }
+
+    textarea.form-control {
+        height: 50px;
+    }
+
+    a:not([href]):not([tabindex]) {
+        color: inherit;
+        text-decoration: underline;
+    }
 </style>
+
+<script>
+    function enableMainCommentButton(value) {
+        if (value != "") {
+            document.getElementById("mainCommentButton").disabled = false;
+        }
+
+        else if (value == "") {
+            document.getElementById("mainCommentButton").disabled = true;
+        }
+    }
+
+    function postComment(buttonId, margin) {
+        var mainCommentId = buttonId.substr(0, buttonId.indexOf('b'))
+        var mainCommentIdWithPrefix = "#" + mainCommentId;
+
+        var subCommentTextBox = document.createElement("textarea");
+        subCommentTextBox.id = "subCommentText";
+        subCommentTextBox.style.marginLeft = margin;
+        subCommentTextBox.className = "form-control";
+
+        var subCommentPostButton = document.createElement("button");
+        subCommentPostButton.style.marginLeft = margin;
+        subCommentPostButton.className = "btn btn-info";
+
+        var subCommentTextBoxId = subCommentTextBox.id;
+
+        subCommentPostButton.textContent = "Post Reply";
+        subCommentPostButton.onclick = function () {
+            var subCommentContent = document.getElementById(subCommentTextBoxId).value;
+
+            if (subCommentContent == "") {
+                alert("Put something atleast!");
+            }
+
+            else {
+                location.href = '@Url.Action("PostComment", "Post")?postId=' + @postId + '&commentId=' + mainCommentId + '&commentContent=' + subCommentContent;
+            }
+        };
+
+                $(mainCommentIdWithPrefix).append(subCommentTextBox);
+                $(mainCommentIdWithPrefix).append(subCommentPostButton);
+                }
+</script>
+
+@helper PopulateComment(Comment comment, int margin)
+{
+    PostEntity pe = new PostEntity();
+    var subscriber = pe.Subscriber_Table.Where(x => x.userid == comment.userid).FirstOrDefault();
+
+    string marginString = margin.ToString() + "px";
+    <div id="@comment.postid" class="container commentDiv" style="margin-left: @marginString">
+        <div class="row">
+            <p class="col-sm-12" style="margin-left: @marginString;"><strong>@subscriber.name</strong></p>
+        </div>
+        <div class="row">
+            <p style="margin-left: @marginString; background: lightgray">@comment.content_</p>
+        </div>
+        <div class="row">
+            @{String buttonId = comment.postid.ToString() + "b";}
+            <a id="@buttonId" class="replyCommentLink col-sm-3" onclick="postComment(this.id, '@marginString');" style="margin-left: @marginString;">Reply</a>
+        </div>
+    </div>
+
+    foreach (var item in comment.comments)
+    {
+        @PopulateComment(item, margin + 50);
+    }
+}
 
 
 @if (article != null)
@@ -89,6 +206,43 @@
         <p style="text-align:justify">@article.content_</p>
     </div>
 
+    <h2>Comments: </h2>
+    if (articleComments != null)
+    {
+        int margin = 0;
+        string marginString = margin.ToString() + "px";
+        foreach (var item in articleComments.comments)
+        {
+            <div id="@item.postid" class="container commentDiv" style="margin-left:@marginString">
+                <div class="row">
+                    @{PostEntity pe = new PostEntity();
+                        var subscriber = pe.Subscriber_Table.Where(x => x.userid == item.userid).FirstOrDefault();
+                    }
+                    <p style="margin-left: @marginString;"><strong>@subscriber.name</strong></p>
+                </div>
+                <div class="row">
+                    <p style="margin-left: @marginString; background: lightgray">@Html.DisplayFor(model => item.content_)</p>
+                </div>
+                <div class="row col-sm-3">
+                    @{String buttonId = item.postid.ToString() + "b";}
+                    <a id="@buttonId" class="replyCommentLink" onclick="postComment(this.id);" style="margin-left: @marginString;">Reply</a>
+                </div>
+            </div>
+
+            foreach (var comment in item.comments)
+            {
+                @PopulateComment(comment, margin + 50)
+            }
+        }
+    }
+
+    using (Html.BeginForm("PostComment", "Post", new { postId = article.postid }))
+    {
+        <div class="postCommentDiv row">
+            @Html.TextAreaFor(model => model.comment.content_ , new { @class = "form-control commentTextBox col-sm-8", id = "mainCommentTextBox", onkeypress = "enableMainCommentButton(this.value)", required = true, oninvalid = "this.setCustomValidity('Put something atleast')", oninput = "this.setCustomValidity('')" })
+            <button id="mainCommentButton" class="btn btn-outline-secondary commentButton col-sm-4">Comment</button>
+        </div>
+    }
 }
 
 @if (blog != null)
@@ -129,6 +283,7 @@
         <br />
         <p style="text-align:justify">@blog.content_</p>
     </div>
+
 
 }
 

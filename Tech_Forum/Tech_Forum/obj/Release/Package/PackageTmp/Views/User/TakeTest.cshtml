@@ -1,0 +1,97 @@
+﻿@using Tech_Forum.Models
+@model List<QuestionBank>
+@{
+    ViewBag.Title = "TakeTest";
+}
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    body {
+        background-image: url(../../Images/test.jpg);
+        background-repeat:repeat;
+    }
+   
+
+</style>
+
+<form action="TakeTest">
+    <div  style="width:600px">
+        <!--Page to select test based on the domain and technology-->
+        <h2 style="text-align:center"><b>Time To Test</b></h2>
+        <br />
+        <br />
+        <h3><b>Search Domain</b></h3>
+        <br />
+        <button type="submit" class="btn btn-default btn-primary" name="searchtest" style="width:120px" onclick="false">
+            <span class="glyphicon glyphicon-search" style="align-items:flex-end"></span>
+        </button>
+        <br />
+        <br />
+        @if (Model != null)
+        {
+            <select name="domain">
+                <option>---SELECT---</option>
+                @foreach (QuestionBank q in Model)
+                {
+                    if (q.domainlist != null)
+                    {
+                        <option value="@q.domainlist">@q.domainlist</option>
+                    }
+                }
+
+
+            </select>
+            <br />
+            <br />
+            <h3 ><b>Search Tests in the Domain</b></h3>
+            <br />
+            <button type="submit" class="btn btn-default btn-primary" name="submitdomain" style="width:120px">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+
+        }
+
+
+
+        <br />
+        <br />
+        @if (Model != null)
+        {
+            List<QuestionBank> qu = new List<QuestionBank>();
+            qu = Model;
+
+
+            <select name="technology">
+                @foreach (QuestionBank q in Model)
+                {
+                    if (q.techlist != null)
+                    {
+                        <option value="@q.techlist">@q.techlist</option>
+                    }
+                }
+
+            </select>
+            <br />
+            <br />
+            <input type="submit" class="btn btn-default btn-primary"  name="submittechnology" value="start test">
+
+        }
+
+    </div>
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
