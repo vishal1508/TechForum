@@ -1,0 +1,12 @@
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\bin\DomainTechService.dll.config
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\bin\DomainTechService.dll
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\bin\DomainTechService.pdb
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\obj\Debug\DomainTechService.csproj.CoreCompileInputs.cache
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\obj\Debug\DomainTechService.dll
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\obj\Debug\DomainTechService.pdb
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\bin\EntityFramework.dll
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\bin\EntityFramework.SqlServer.dll
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\bin\EntityFramework.xml
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\bin\EntityFramework.SqlServer.xml
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\obj\Debug\DomainTechService.csproj.CopyComplete
+C:\Users\ManageLocal\source\repos\Tech_Forum\DomainTechService\obj\Debug\DomainTechService.csprojAssemblyReference.cache

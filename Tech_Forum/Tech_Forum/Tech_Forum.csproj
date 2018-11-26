@@ -57,6 +57,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -155,11 +156,19 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Connected Services\DomaintechServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\DomainTechService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\SubscriberController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Crypto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -190,14 +199,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PostModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\PostParentModel.cs" />
     <Compile Include="Models\Post_Table.cs">
       <DependentUpon>PostModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\QuestionBank.cs" />
-    <Compile Include="Models\Question_Bank_Table.cs">
-      <DependentUpon>PostModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\SubscriberLogin.cs" />
     <Compile Include="Models\Subscriber_Table.cs">
       <DependentUpon>PostModel.tt</DependentUpon>
@@ -206,12 +212,33 @@
       <DependentUpon>PostModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TestUser.cs" />
-    <Compile Include="Models\Test_Table.cs">
-      <DependentUpon>PostModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Connected Services\DomaintechServiceReference\DomainTechService.wsdl" />
+    <None Include="Connected Services\DomaintechServiceReference\DomainTechService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DomaintechServiceReference\DomainTechService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DomaintechServiceReference\DomainTechService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DomainTechService\DomainTechService.disco" />
+    <None Include="Connected Services\DomainTechService\configuration91.svcinfo" />
+    <None Include="Connected Services\DomainTechService\configuration.svcinfo" />
+    <None Include="Connected Services\DomainTechService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Connected Services\DomaintechServiceReference\DomainTechService.disco" />
+    <None Include="Connected Services\DomaintechServiceReference\configuration91.svcinfo" />
+    <None Include="Connected Services\DomaintechServiceReference\configuration.svcinfo" />
+    <None Include="Connected Services\DomaintechServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -250,8 +277,12 @@
     <Content Include="Models\PostModel.edmx.diagram">
       <DependentUpon>PostModel.edmx</DependentUpon>
     </Content>
-    <None Include="Properties\PublishProfiles\tech-forum - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\tech-forum - Web Deploy.pubxml" />
+    <None Include="Connected Services\DomainTechService\DomainTechService.wsdl" />
+    <None Include="Connected Services\DomainTechService\DomainTechService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Properties\DataSources\DomainTech.Domain_Table.datasource" />
+    <Content Include="Properties\DataSources\DomainTech.Technology_Table.datasource" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -282,20 +313,12 @@
     <Content Include="Views\Subscriber\Registration.cshtml" />
     <Content Include="Views\Subscriber\VerifyAccount.cshtml" />
     <Content Include="Views\Subscriber\Login.cshtml" />
-    <Content Include="Views\Post\ArticleResultView.cshtml" />
+    <Content Include="Views\Post\ResultView.cshtml" />
     <Content Include="Views\Subscriber\ManageUser.cshtml" />
     <Content Include="Views\Subscriber\EditPost.cshtml" />
     <Content Include="Views\Subscriber\DeletePost.cshtml" />
-    <Content Include="Views\User\Index.cshtml" />
-    <Content Include="Views\User\ReviewTest.cshtml" />
-    <Content Include="Views\User\TakeTest.cshtml" />
-    <Content Include="Views\User\TestPage.cshtml" />
-    <Content Include="Views\User\TestResult.cshtml" />
-    <Content Include="Views\Admin\GenerateCategoryReport.cshtml" />
-    <Content Include="Views\Admin\GenerateOverallReport.cshtml" />
-    <Content Include="Views\Admin\GenerateTestReport.cshtml" />
-    <Content Include="Views\Admin\GenerateUserReport.cshtml" />
-    <Content Include="Views\Blog\BlogResultView.cshtml" />
+    <Content Include="Views\Subscriber\ForgotPassword.cshtml" />
+    <Content Include="Views\Subscriber\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -315,6 +338,19 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\DomaintechServiceReference\" />
+    <WCFMetadataStorage Include="Connected Services\DomainTechService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DomainTechService\DomainTechService.csproj">
+      <Project>{0eb43aa1-c1c8-4eb2-a4b4-1292a447bc3c}</Project>
+      <Name>DomainTechService</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

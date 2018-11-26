@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Tech_ForumModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Domain_Table">
+    <Key>
+      <PropertyRef Name="did" />
+    </Key>
+    <Property Name="did" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="domain" Type="nvarchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Technology_Table">
+    <Key>
+      <PropertyRef Name="tid" />
+    </Key>
+    <Property Name="tid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="technology" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="did" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Technology_Table_Domain_Table">
+    <End Role="Domain_Table" Type="Self.Domain_Table" Multiplicity="1" />
+    <End Role="Technology_Table" Type="Self.Technology_Table" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Domain_Table">
+        <PropertyRef Name="did" />
+      </Principal>
+      <Dependent Role="Technology_Table">
+        <PropertyRef Name="did" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Tech_ForumModelStoreContainer">
+    <EntitySet Name="Domain_Table" EntityType="Self.Domain_Table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Technology_Table" EntityType="Self.Technology_Table" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Technology_Table_Domain_Table" Association="Self.FK_Technology_Table_Domain_Table">
+      <End Role="Domain_Table" EntitySet="Domain_Table" />
+      <End Role="Technology_Table" EntitySet="Technology_Table" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -10,8 +10,11 @@ namespace Tech_Forum.Models
     public class Article
     {
         public Post Post { get; set; }
-        public List<Comment> comments = new List<Comment>();
+        List<Comment> comments = new List<Comment>();
 
         static public int maxlength = 5000;
+
+
+
     }
 }

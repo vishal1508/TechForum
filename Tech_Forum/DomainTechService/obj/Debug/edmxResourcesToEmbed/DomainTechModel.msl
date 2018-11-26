@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Tech_ForumModelStoreContainer" CdmEntityContainer="DomainTechEntity">
+    <EntitySetMapping Name="Domain_Table">
+      <EntityTypeMapping TypeName="Tech_ForumModel.Domain_Table">
+        <MappingFragment StoreEntitySet="Domain_Table">
+          <ScalarProperty Name="did" ColumnName="did" />
+          <ScalarProperty Name="domain" ColumnName="domain" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Technology_Table">
+      <EntityTypeMapping TypeName="Tech_ForumModel.Technology_Table">
+        <MappingFragment StoreEntitySet="Technology_Table">
+          <ScalarProperty Name="tid" ColumnName="tid" />
+          <ScalarProperty Name="technology" ColumnName="technology" />
+          <ScalarProperty Name="did" ColumnName="did" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

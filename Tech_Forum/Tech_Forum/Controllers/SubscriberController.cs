@@ -11,7 +11,7 @@ using System.IO;
 using System.Web.Security;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
-using Newtonsoft.Json;
+using DomainTech;
 
 namespace Tech_Forum.Controllers
 {
@@ -202,8 +202,28 @@ namespace Tech_Forum.Controllers
                 string userid = Session["userid"].ToString();
                 List<Post_Table> article = pe.Post_Table.Where(x => x.userid.Equals(userid) && x.category == true).ToList();
                 List<Post_Table> blog = pe.Post_Table.Where(x => x.userid.Equals(userid) && x.category == false).ToList();
-                ViewData["Articles"] = article;
-                ViewData["Blogs"] = blog;
+
+                if (article.Count > 0)
+                {
+                    ViewData["Articles"] = article;
+                }
+                else
+                {
+                    ViewData["Articles"] = null;
+                    ViewBag.ArticleMessage = "No articles published ";
+                }
+
+                if (blog.Count > 0)
+                {
+                    ViewData["Blogs"] = blog;
+                }
+                else
+                {
+                    ViewData["Blogs"] = null;
+                    ViewBag.BlogMessage = "No blogs posted ";
+                }
+                
+                
 
                 return View();
             }
@@ -218,7 +238,8 @@ namespace Tech_Forum.Controllers
 
             using (PostEntity pe = new PostEntity())
             {
-                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
+                DomainTechEntity dte = new DomainTechEntity();
+                List<Domain_Table> DomainList = dte.Domain_Table.ToList();
                 ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
                 var post = pe.Post_Table.Where(x => x.postid == id).FirstOrDefault();
                 return View(post);
@@ -231,11 +252,9 @@ namespace Tech_Forum.Controllers
         public ActionResult EditPost(int id, Post_Table post)
         {
             StreamWriter stream = null;
-            using (PostEntity pe = new PostEntity())
-            {
-                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
-                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
-            }
+            DomainTech.DomainTechService dt = new DomainTech.DomainTechService();
+            List<DomainTech.Domain_Table> DomainList = dt.GetDomainList();
+            ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
             try
             {
                 using (PostEntity pe = new PostEntity())
@@ -251,9 +270,10 @@ namespace Tech_Forum.Controllers
 
                     int did = Convert.ToInt32(post.domain);
                     int tid = Convert.ToInt32(post.technology);
-                    var d = pe.Domain_Table.Where(x => x.did == did).FirstOrDefault();
+                    DomainTechEntity dte = new DomainTechEntity();
+                    var d = dte.Domain_Table.Where(x => x.did == did).FirstOrDefault();
                     post.domain = d.domain;
-                    var t = pe.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
+                    var t = dte.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
                     post.technology = t.technology;
                     post.userid = Session["userid"].ToString();
                     ViewData["Article"] = post;
@@ -261,7 +281,7 @@ namespace Tech_Forum.Controllers
                     pe.SaveChanges();
           
                 }
-                return View("../Post/ArticleResultView");
+                return View("../Post/ResultView");
             }
             catch(Exception e)
             {
@@ -308,19 +328,13 @@ namespace Tech_Forum.Controllers
 
         //Details
         [Authorize]
-        public ActionResult Details(int id, Article article)
+        public ActionResult Details(int id)
         {
             using (PostEntity pe = new PostEntity())
             {
                 Post_Table post = pe.Post_Table.Where(x => x.postid == id).FirstOrDefault();
                 ViewData["Article"] = post;
-
-                if (post.comments != null)
-                {
-                    article.comments = JsonConvert.DeserializeObject<List<Comment>>(post.comments);
-                }
-                ViewData["ArticleComments"] = article;
-                return View("../Post/ArticleResultView");
+                return View("../Post/ResultView");
             }
              
         }
@@ -336,19 +350,34 @@ namespace Tech_Forum.Controllers
         }
 
         [NonAction]
-        public void SendVerificationLinkEmail(string emailid,string activationcode)
+        public void SendVerificationLinkEmail(string emailid,string activationcode,string emailFor="VerifyAccount")
         {
-            var verifyUrl = "/Subscriber/VerifyAccount/" + activationcode;
+            var verifyUrl = "/Subscriber/"+emailFor+"/" + activationcode;
             var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
 
-            var fromEmail = new MailAddress("vkvishal1508@gmail.com", "Tech Forum");
+            var fromEmail = new MailAddress("techforumofcl@gmail.com", "Tech Forum");
             var toEmail = new MailAddress(emailid);
-            var fromEmailPassword = "Vkvishal@@@1508108254";
-            string subject = "Your account is successfully created !";
+            var fromEmailPassword = "sagamaga@123";
 
-            string body = "<br/><br/> We are excited to tell you that your Tech Forum account is " 
-                + " Successfully created. Please click on the below link to verify your account "
-                +" <br/><br/><a href='"+link+"'>"+link+"</a>";
+
+            string subject = "";
+            string body = "";
+            if (emailFor=="VerifyAccount")
+            {
+                subject = "Your account is successfully created !";
+
+                body = "<br/><br/> We are excited to tell you that your Tech Forum account is "
+                    + " Successfully created. Please click on the below link to verify your account "
+                    + " <br/><br/><a href='" + link + "'>" + link + "</a>";
+            }
+            else if(emailFor == "ResetPassword")
+            {
+                subject = "Reset Password";
+
+                body = "Hi,<br/><br/>We got request to reset your account password. Please click the below link to reset your password"+
+                    "<br/><br/><a href="+link+">Reset Password Link</a>";
+            }
+            
             var smtp = new SmtpClient
             {
                 Host = "smtp.gmail.com",
@@ -378,5 +407,96 @@ namespace Tech_Forum.Controllers
             
         }
 
+        // Forgot Password
+
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        //Verify the forgot password
+        [HttpPost]
+
+        public ActionResult ForgotPassword(string EmailID)
+        {
+            //Verify the emailid
+            //Generate Reset Password Link
+            //Send Email
+            string message = "";
+            bool status = false;
+
+            using (PostEntity pe = new PostEntity())
+            {
+                var account = pe.Subscriber_Table.Where(x => x.email == EmailID).FirstOrDefault();
+                if (account != null)
+                {
+                    //Send email for reset password
+                    string resetCode = Guid.NewGuid().ToString();
+                    SendVerificationLinkEmail(account.email, resetCode, "ResetPassword");
+                    account.ResetPasswordCode = resetCode;
+
+                    pe.Configuration.ValidateOnSaveEnabled = false;
+                    pe.SaveChanges();
+                    message = "Reset Password Link has been sent to your Email ID";
+                }
+                else
+                {
+                    message = "Account Not Found";
+                }
+            }
+            ViewBag.Message = message;
+            return View();
+        }
+
+        public ActionResult ResetPassword(string id)
+        {
+            //Verify the reset password link
+            //Find accound associated with this link
+            //redirect to reset password page
+            using (PostEntity pe = new PostEntity())
+            {
+                var user = pe.Subscriber_Table.Where(x => x.ResetPasswordCode == id).FirstOrDefault();
+                if (user != null)
+                {
+                    ResetPasswordModel model = new ResetPasswordModel();
+                    model.ResetCode = id;
+                    return View(model);
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPassword(ResetPasswordModel model)
+        {
+            var message = "";
+            if (ModelState.IsValid)
+            {
+                using (PostEntity pe = new PostEntity())
+                {
+                    var user = pe.Subscriber_Table.Where(x => x.ResetPasswordCode == model.ResetCode).FirstOrDefault();
+                    if (user != null)
+                    {
+                        user.password = Crypto.Hash(model.NewPassword);
+                        user.ResetPasswordCode = "";
+                        pe.Configuration.ValidateOnSaveEnabled = false;
+                        pe.SaveChanges();
+                        message = "New password updated successfully";
+                    }
+                }
+            }
+            else
+            {
+                message = "Something invalid";
+            }
+
+            ViewBag.Message = message;
+            return View(model);
+        }
     }
 }
