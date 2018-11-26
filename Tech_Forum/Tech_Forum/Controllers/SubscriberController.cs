@@ -11,6 +11,7 @@ using System.IO;
 using System.Web.Security;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using Newtonsoft.Json;
 
 namespace Tech_Forum.Controllers
 {
@@ -260,7 +261,7 @@ namespace Tech_Forum.Controllers
                     pe.SaveChanges();
           
                 }
-                return View("../Post/ResultView");
+                return View("../Post/ArticleResultView");
             }
             catch(Exception e)
             {
@@ -307,13 +308,19 @@ namespace Tech_Forum.Controllers
 
         //Details
         [Authorize]
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, Article article)
         {
             using (PostEntity pe = new PostEntity())
             {
                 Post_Table post = pe.Post_Table.Where(x => x.postid == id).FirstOrDefault();
                 ViewData["Article"] = post;
-                return View("../Post/ResultView");
+
+                if (post.comments != null)
+                {
+                    article.comments = JsonConvert.DeserializeObject<List<Comment>>(post.comments);
+                }
+                ViewData["ArticleComments"] = article;
+                return View("../Post/ArticleResultView");
             }
              
         }

@@ -9,7 +9,7 @@ namespace Tech_Forum.Models
     
     public class Content
     {
-        public int postid { get; set; }
+        public string postid { get; set; }
         public string content_ { get; set; }
         public System.DateTime date { get; set; }
         public string userid { get; set; }

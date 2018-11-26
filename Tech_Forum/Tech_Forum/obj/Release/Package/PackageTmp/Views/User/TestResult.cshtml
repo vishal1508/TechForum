@@ -1,0 +1,39 @@
+﻿@using Tech_Forum.Models
+@model QuestionBank
+@{
+    ViewBag.Title = "TestResult";
+}
+<style>
+    body {
+        background-image: url(../../Images/blue.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        color:white        
+    }
+</style>
+<h2>TestResult</h2>
+<form action="ReviewTest">
+    <h2>You have successfully completed the test</h2>
+
+    <br />
+    @if (Model != null)
+    {
+        <h2>The score is :</h2>
+        <h2>@Model.score</h2>
+        <br />
+        <br />
+        if (Model.score < 5)
+        {
+            <img src="~/Images/fail.jpg" style="width:200px;height:100px" />
+        }
+        else
+        {
+            <img src="~/Images/pass.jpg" style="width:200px;height:100px" />
+        }
+
+    }
+    <br />
+    <br />
+    <input type="submit" style="color:black" class="btn btn-default btn-success" name="review" value="Review Test" />
+
+</form>

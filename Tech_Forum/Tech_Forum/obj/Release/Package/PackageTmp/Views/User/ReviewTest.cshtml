@@ -1,0 +1,156 @@
+﻿@using Tech_Forum.Models
+@model List<QuestionBank>
+@{
+    ViewBag.Title = "ReviewTest";
+}
+
+
+
+<style>
+    body {
+        background-image: url(../../Images/blue.jpg);
+        background-repeat: no-repeat;
+        background-size: 8000px;
+    }
+</style>
+
+<h2 style="text-align:center;color:white;">Test Review</h2>
+<br />
+<br />
+
+
+
+
+<form action="TakeTest" id="myform" name="myform">
+    <div id="one">
+
+
+        @if (Model != null)
+        {
+
+
+            <!--Page to select the options of the test -->
+
+            foreach (QuestionBank q in Model)
+            {
+                <div id="list" class="jumbotron">
+                    <fieldset>
+                        @if (q.qno > 0)
+                        {
+                            if (q.CorrectAnswer.Equals(q.selectoptions))
+                            {
+                                <span style="color:green" class="glyphicon glyphicon-ok-sign gi-5x" ></span>
+                            }
+                            else
+                            {
+                                <span  style="color:red" class="glyphicon glyphicon-remove-sign gi-5x"></span>
+                            }
+                            <h4>@q.qno.@q.Question</h4>
+
+                            <br />
+                      
+                            if (q.selectoptions.Equals(q.Options[0]))
+                            {
+                                if (q.CorrectAnswer.Equals(q.Options[0]))
+                                {
+                                    <h4 style="background-color:green;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[0]" style="color:green" disabled />@q.Options[0]</h4>
+                                }
+                                else
+                                {
+                                    <h4 style="background-color:red;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[0]" style="color:green" disabled />@q.Options[0]</h4>
+                                }
+                            }
+                            else
+                            {
+                                if (q.CorrectAnswer.Equals(q.Options[0]))
+                                {
+                                    <h4 style="background-color:green;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[0]" style="color:green" disabled />@q.Options[0]</h4>
+                                }
+                                else
+                                {
+                                    <h4><input type="radio" name="_@q.qno" id="options" value="@q.Options[0]" style="color:green" disabled />@q.Options[0]</h4>
+                                }
+                            }
+
+
+                            if (q.selectoptions.Equals(q.Options[1]))
+                            {
+                                if (q.CorrectAnswer.Equals(q.Options[1]))
+                                {
+                                    <h4 style="background-color:green;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[1]" style="color:green" disabled />@q.Options[1]</h4>
+                                }
+                                else
+                                {
+                                    <h4 style="background-color:red;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[1]" style="color:green" disabled />@q.Options[1]</h4>
+                                }
+                            }
+                            else
+                            {
+                                if (q.CorrectAnswer.Equals(q.Options[1]))
+                                {
+                                    <h4 style="background-color:green;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[1]" style="color:green" disabled />@q.Options[1]</h4>
+                                }
+                                else
+                                {
+                                    <h4><input type="radio" name="_@q.qno" id="options" value="@q.Options[1]" style="color:green" disabled />@q.Options[1]</h4>
+                                }
+                            }
+
+
+                            if (q.selectoptions.Equals(q.Options[2]))
+                            {
+                                if (q.CorrectAnswer.Equals(q.Options[2]))
+                                {
+                                    <h4 style="background-color:green;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[2]" style="color:green" disabled />@q.Options[2]</h4>
+                                }
+                                else
+                                {
+                                    <h4 style="background-color:red;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[2]" style="color:green" disabled />@q.Options[2]</h4>
+                                }
+                            }
+                            else
+                            {
+                                if (q.CorrectAnswer.Equals(q.Options[2]))
+                                {
+                                    <h4 style="background-color:green;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[2]" style="color:green" disabled />@q.Options[2]</h4>
+                                }
+                                else
+                                {
+                                    <h4><input type="radio" name="_@q.qno" id="options" value="@q.Options[2]" style="color:green" disabled />@q.Options[2]</h4>
+                                }
+                            }
+
+
+                            if (q.selectoptions.Equals(q.Options[3]))
+                            {
+                                if (q.CorrectAnswer.Equals(q.Options[3]))
+                                {
+                                    <h4 style="background-color:green;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[3]" style="color:green" disabled />@q.Options[3]</h4>
+                                }
+                                else
+                                {
+                                    <h4 style="background-color:red;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[3]" style="color:green" disabled />@q.Options[3]</h4>
+                                }
+                            }
+                            else
+                            {
+                                if (q.CorrectAnswer.Equals(q.Options[3]))
+                                {
+                                    <h4 style="background-color:green;color:white"><input type="radio" name="_@q.qno" id="options" value="@q.Options[3]" style="color:green" disabled />@q.Options[3]</h4>
+                                }
+                                else
+                                {
+                                    <h4><input type="radio" name="_@q.qno" id="options" value="@q.Options[3]" style="color:green" disabled />@q.Options[3]</h4>
+                                }
+                            }
+
+                        }
+                    </fieldset>
+                </div>
+            }
+
+        }
+    </div>
+    <!--submit the test before or aftertimeout-->
+ 
+</form>
