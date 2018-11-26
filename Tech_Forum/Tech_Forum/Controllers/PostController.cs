@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using DomainTech;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -27,11 +26,9 @@ namespace Tech_Forum.Controllers
         [Authorize]
         public ActionResult BrowseArticle()
         {
-            using (PostEntity pe = new PostEntity())
-            {
-                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
-                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
-            }
+            DomainTech.DomainTechService dt = new DomainTech.DomainTechService();
+            List<Domain_Table> DomainList = dt.GetDomainList();
+            ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
             return View();
         }
 
@@ -41,16 +38,23 @@ namespace Tech_Forum.Controllers
         {
             using (PostEntity pe = new PostEntity())
             {
-                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
+                DomainTech.DomainTechService dt = new DomainTech.DomainTechService();
+                List<Domain_Table> DomainList = dt.GetDomainList();
                 ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+
+                pe.Configuration.ProxyCreationEnabled = false;
+
+                List<Technology_Table> TechnologyList = dt.GetTechforDomain(post.domain);
+                ViewBag.TechnologyList = new SelectList(TechnologyList, "tid", "technology");
 
                 int did = Convert.ToInt32(post.domain);
                 int tid = Convert.ToInt32(post.technology);
-                var d = pe.Domain_Table.Where(x => x.did == did).FirstOrDefault();
-                post.domain = d.domain;
-                var t = pe.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
-                post.technology = t.technology;
 
+                DomainTechEntity dte = new DomainTechEntity();
+                var d = dte.Domain_Table.Where(x => x.did == did).FirstOrDefault();
+                post.domain = d.domain;
+                var t = dte.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
+                post.technology = t.technology;
 
                 List<Post_Table> browsearticle = pe.Post_Table.Where(x => x.domain == post.domain && x.technology == post.technology && x.category == true).ToList();
                 if (browsearticle.Count > 0)
@@ -72,45 +76,56 @@ namespace Tech_Forum.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            using (PostEntity pe = new PostEntity())
-            {
-                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
-                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
-                return View();
-            }  
-            
+            DomainTech.DomainTechService dt = new DomainTech.DomainTechService();
+            List<Domain_Table> DomainList = dt.GetDomainList();
+            ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+            return View();
+
         }
 
         public JsonResult GetTechList(int did)
         {
-            using (PostEntity pe = new PostEntity())
+            using (DomainTechEntity dt = new DomainTechEntity())
             {
-                pe.Configuration.ProxyCreationEnabled = false;
-                List<Technology_Table> TechList = pe.Technology_Table.Where(x => x.did == did).ToList();
+                dt.Configuration.ProxyCreationEnabled = false;
+
+                List<Technology_Table> TechList = dt.Technology_Table.Where(x => x.did == did).ToList();
                 return Json(TechList, JsonRequestBehavior.AllowGet);
             }
-               
+
         }
 
         // POST: Post/Create
         [HttpPost]
         public ActionResult Create(Post_Table post,Article article,Comment comment)
         {
-            using (PostEntity pe = new PostEntity())
-            {
-                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
-                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
-            }
             try
             {
                 using(PostEntity pe = new PostEntity())
                 {
-                   
+
+                    DomainTech.DomainTechService dt = new DomainTech.DomainTechService();
+                    List<Domain_Table> DomainList = dt.GetDomainList();
+                    ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+
+                    pe.Configuration.ProxyCreationEnabled = false;
+
+                    List<Technology_Table> TechnologyList = dt.GetTechforDomain(post.domain);
+                    ViewBag.TechnologyList = new SelectList(TechnologyList, "tid", "technology");
+
+                    //Get the Domain ID
                     int did = Convert.ToInt32(article.Post.domain);
+                    //Get the Technology ID
                     int tid = Convert.ToInt32(article.Post.technology);
-                    var d = pe.Domain_Table.Where(x => x.did == did).FirstOrDefault();
+
+
+                    DomainTechEntity dte = new DomainTechEntity();
+                    //Convert the Domain ID to Domain Name
+                    var d = dte.Domain_Table.Where(x => x.did == did).FirstOrDefault();
                     post.domain = d.domain;
-                    var t = pe.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
+
+                    //Convert the Technology ID to Technology Name
+                    var t = dte.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
                     post.technology = t.technology;
 
                     //Check for same title
@@ -134,83 +149,16 @@ namespace Tech_Forum.Controllers
                         pe.Post_Table.Add(post);
                         pe.SaveChanges();
                         
-                        return View("ArticleResultView");
-                    }  
+                        return View("ResultView");
+                    }
+                   
                 }
+
+                    
             }
             catch
             {
                 return View();
-            }
-        }
-
-        public ActionResult PostComment(Post_Table postTable, Comment comment, Article article, string postId, string commentId, string commentContent)
-        {
-            try
-            {
-                using (PostEntity pe = new PostEntity())
-                {
-                    var postIdInt = Convert.ToInt32(postId);
-
-                    var post = pe.Post_Table.Where(x => x.postid == postIdInt).FirstOrDefault();
-
-                    if (post.comments != null)
-                    {
-                        article.comments = JsonConvert.DeserializeObject<List<Comment>>(post.comments);
-                    }
-
-                    ViewData["Article"] = post;
-                    ViewData["ArticleComments"] = article;
-
-                    comment.userid = Session["userid"].ToString();
-                    comment.date = DateTime.Now;
-
-                    if (commentContent == null)
-                    {
-                        if (comment.content_ != null)
-                        {
-                            if (article.comments.Count() < 10)
-                            {
-                                comment.postid = "0" + (article.comments.Count() + 1);
-                            }
-                            else
-                            {
-                                comment.postid = (article.comments.Count() + 1).ToString();
-                            }
-                            article.comments.Add(comment);
-                        }
-
-                        else
-                        {
-                            ViewData["EmptyComment"] = "Put something atleast!";
-                            return View("ArticleResultView");
-                        }
-                    }
-
-                    else if (commentContent != null)
-                    {
-                        var foundParentComment = false;
-                        while (!foundParentComment)
-                        {
-                            foundParentComment = AddCommentToParentComment(article.comments, commentId, commentContent);
-                        }
-                    }
-
-                    var jsonCommentList = JsonConvert.SerializeObject(article.comments);
-
-                    post.comments = jsonCommentList;
-
-                    pe.Post_Table.AddOrUpdate(post);
-                    pe.SaveChanges();
-
-                    return View("ArticleResultView");
-                }
-            }
-
-            //TODO: Print exception in log
-            catch (Exception e)
-            {
-                return Content(e.ToString());
             }
         }
 
@@ -236,8 +184,9 @@ namespace Tech_Forum.Controllers
                     ViewData["searchlist"] = null;
                     ViewBag.SearchMessage = "No results found";
                 }
+               
             }
-            return View("ArticleResultView");
+            return View("ResultView");
         }
 
 
@@ -285,38 +234,6 @@ namespace Tech_Forum.Controllers
             {
                 return View();
             }
-        }
-
-        public bool AddCommentToParentComment(List<Comment> comments, string id, string commentContent)
-        {
-            foreach (var item in comments)
-            {
-                if (item.postid == id)
-                {
-                    Comment comment = new Comment();
-
-                    comment.content_ = commentContent;
-                    comment.userid = Session["userid"].ToString();
-                    comment.date = DateTime.Now;
-
-                    if (item.comments.Count < 10)
-                    {
-                        comment.postid = id + "0" + (item.comments.Count + 1);
-                    }
-                    else
-                    {
-                        comment.postid = id + (item.comments.Count + 1);
-                    }
-
-                    item.comments.Add(comment);
-                    return true;
-                }
-                if (AddCommentToParentComment(item.comments, id, commentContent))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

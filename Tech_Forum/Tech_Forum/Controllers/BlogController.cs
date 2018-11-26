@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Migrations;
 using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Tech_Forum.Models;
+using DomainTech;
 
 namespace Tech_Forum.Controllers
 {
@@ -28,28 +27,36 @@ namespace Tech_Forum.Controllers
         [Authorize]
         public ActionResult BrowseBlog()
         {
-            using (PostEntity pe = new PostEntity())
-            {
-                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
-                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
-            }
+            
+            DomainTech.DomainTechService dt = new DomainTech.DomainTechService();
+            List<Domain_Table> DomainList = dt.GetDomainList();
+            ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
             return View();
         }
 
+       
         [HttpPost]
         [Authorize]
         public ActionResult BrowseBlog(Post_Table post)
         {
             using (PostEntity pe = new PostEntity())
             {
-                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
+                DomainTech.DomainTechService dt = new DomainTech.DomainTechService();
+                List<Domain_Table> DomainList = dt.GetDomainList();
                 ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+
+                pe.Configuration.ProxyCreationEnabled = false;
+
+                List<Technology_Table> TechnologyList = dt.GetTechforDomain(post.domain);
+                ViewBag.TechnologyList = new SelectList(TechnologyList, "tid", "technology");
 
                 int did = Convert.ToInt32(post.domain);
                 int tid = Convert.ToInt32(post.technology);
-                var d = pe.Domain_Table.Where(x => x.did == did).FirstOrDefault();
+
+                DomainTechEntity dte = new DomainTechEntity();
+                var d = dte.Domain_Table.Where(x => x.did == did).FirstOrDefault();
                 post.domain = d.domain;
-                var t = pe.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
+                var t = dte.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
                 post.technology = t.technology;
 
 
@@ -72,20 +79,20 @@ namespace Tech_Forum.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            using (PostEntity pe = new PostEntity())
-            {
-                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
-                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
-                return View();
-            }
+            DomainTech.DomainTechService dt = new DomainTech.DomainTechService();
+            List<Domain_Table> DomainList = dt.GetDomainList();
+            ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+            return View();
+
         }
 
         public JsonResult GetTechList(int did)
         {
-            using (PostEntity pe = new PostEntity())
+            using (DomainTechEntity dt = new DomainTechEntity())
             {
-                pe.Configuration.ProxyCreationEnabled = false;
-                List<Technology_Table> TechList = pe.Technology_Table.Where(x => x.did == did).ToList();
+                dt.Configuration.ProxyCreationEnabled = false;
+
+                List<Technology_Table> TechList = dt.Technology_Table.Where(x => x.did == did).ToList();
                 return Json(TechList, JsonRequestBehavior.AllowGet);
             }
 
@@ -95,27 +102,34 @@ namespace Tech_Forum.Controllers
         [HttpPost]
         public ActionResult Create(Post_Table post,Blog blog,Comment comment)
         {
-            using (PostEntity pe = new PostEntity())
-            {
-                List<Domain_Table> DomainList = pe.Domain_Table.ToList();
-                ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
-            }
+            
             StreamWriter stream = null;
             try
             {
                 using (PostEntity pe = new PostEntity())
                 {
+                    DomainTech.DomainTechService dt = new DomainTech.DomainTechService();
+                    List<Domain_Table> DomainList = dt.GetDomainList();
+                    ViewBag.DomainList = new SelectList(DomainList, "did", "domain");
+
+                    pe.Configuration.ProxyCreationEnabled = false;
+
+                    List<Technology_Table> TechnologyList = dt.GetTechforDomain(post.domain);
+                    ViewBag.TechnologyList = new SelectList(TechnologyList, "tid", "technology");
+
                     //Get the Domain ID
                     int did = Convert.ToInt32(blog.Post.domain);
                     //Get the Technology ID
                     int tid = Convert.ToInt32(blog.Post.technology);
 
+
+                    DomainTechEntity dte = new DomainTechEntity();
                     //Convert the Domain ID to Domain Name
-                    var d = pe.Domain_Table.Where(x => x.did == did).FirstOrDefault();
+                    var d = dte.Domain_Table.Where(x => x.did == did).FirstOrDefault();
                     post.domain = d.domain;
 
                     //Convert the Technology ID to Technology Name
-                    var t = pe.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
+                    var t = dte.Technology_Table.Where(x => x.tid == tid).FirstOrDefault();
                     post.technology = t.technology;
 
                     //Check for same title
@@ -140,7 +154,7 @@ namespace Tech_Forum.Controllers
 
 
                         pe.SaveChanges();
-                        return View("../Blog/BlogResultView");
+                        return View("../Post/ResultView");
                     }
                     
 
@@ -158,67 +172,6 @@ namespace Tech_Forum.Controllers
                 }
                 stream.Close();
                 return View();
-            }
-        }
-
-        public ActionResult PostComment(Post_Table postTable, Comment comment, Blog blog, string postId, string commentId, string commentContent)
-        {
-            try
-            {
-                using (PostEntity pe = new PostEntity())
-                {
-                    var postIdInt = Convert.ToInt32(postId);
-
-                    var post = pe.Post_Table.Where(x => x.postid == postIdInt).FirstOrDefault();
-
-                    if (post.comments != null)
-                    {
-                        blog.comments = JsonConvert.DeserializeObject<List<Comment>>(post.comments);
-                    }
-
-                    ViewData["Blog"] = post;
-                    ViewData["BlogComments"] = blog;
-
-                    comment.userid = Session["userid"].ToString();
-                    comment.date = DateTime.Now;
-
-                    if (commentContent == null)
-                    {
-                        if (blog.comments.Count() < 10)
-                        {
-                            comment.postid = "0" + (blog.comments.Count() + 1);
-                        }
-                        else
-                        {
-                            comment.postid = (blog.comments.Count() + 1).ToString();
-                        }
-                        blog.comments.Add(comment);
-                    }
-
-                    else if (commentContent != null)
-                    {
-                        var foundParentComment = false;
-                        while (!foundParentComment)
-                        {
-                            foundParentComment = AddCommentToParentComment(blog.comments, commentId, commentContent);
-                        }
-                    }
-
-                    var jsonCommentList = JsonConvert.SerializeObject(blog.comments);
-
-                    post.comments = jsonCommentList;
-
-                    pe.Post_Table.AddOrUpdate(post);
-                    pe.SaveChanges();
-
-                    return View("BlogResultView");
-                }
-            }
-
-            //TODO: Print exception in log
-            catch (Exception e)
-            {
-                return Content(e.ToString());
             }
         }
 
@@ -265,38 +218,6 @@ namespace Tech_Forum.Controllers
             {
                 return View();
             }
-        }
-
-        public bool AddCommentToParentComment(List<Comment> comments, string id, string commentContent)
-        {
-            foreach (var item in comments)
-            {
-                if (item.postid == id)
-                {
-                    Comment comment = new Comment();
-
-                    comment.content_ = commentContent;
-                    comment.userid = Session["userid"].ToString();
-                    comment.date = DateTime.Now;
-
-                    if (item.comments.Count < 10)
-                    {
-                        comment.postid = id + "0" + (item.comments.Count + 1);
-                    }
-                    else
-                    {
-                        comment.postid = id + (item.comments.Count + 1);
-                    }
-
-                    item.comments.Add(comment);
-                    return true;
-                }
-                if (AddCommentToParentComment(item.comments, id, commentContent))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

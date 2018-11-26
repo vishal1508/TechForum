@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DomainTech" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DomainTech" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfDomain_Table">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Domain_Table" nillable="true" type="tns:Domain_Table" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDomain_Table" nillable="true" type="tns:ArrayOfDomain_Table" />
+  <xs:complexType name="Domain_Table">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Technology_Table" nillable="true" type="tns:ArrayOfTechnology_Table" />
+      <xs:element minOccurs="0" name="did" type="xs:int" />
+      <xs:element minOccurs="0" name="domain" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Domain_Table" nillable="true" type="tns:Domain_Table" />
+  <xs:complexType name="ArrayOfTechnology_Table">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Technology_Table" nillable="true" type="tns:Technology_Table" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTechnology_Table" nillable="true" type="tns:ArrayOfTechnology_Table" />
+  <xs:complexType name="Technology_Table">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Domain_Table" nillable="true" type="tns:Domain_Table" />
+      <xs:element minOccurs="0" name="did" type="xs:int" />
+      <xs:element minOccurs="0" name="technology" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="tid" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Technology_Table" nillable="true" type="tns:Technology_Table" />
+</xs:schema>

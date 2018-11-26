@@ -21,6 +21,7 @@
     <EntitySetMapping Name="Subscriber_Table">
       <EntityTypeMapping TypeName="PostModel.Subscriber_Table">
         <MappingFragment StoreEntitySet="Subscriber_Table">
+          <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
           <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
           <ScalarProperty Name="IsEmailVerified" ColumnName="IsEmailVerified" />
           <ScalarProperty Name="description" ColumnName="description" />
@@ -47,30 +48,6 @@
           <ScalarProperty Name="domain" ColumnName="domain" />
           <ScalarProperty Name="title" ColumnName="title" />
           <ScalarProperty Name="postid" ColumnName="postid" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Question_Bank_Table">
-      <EntityTypeMapping TypeName="PostModel.Question_Bank_Table">
-        <MappingFragment StoreEntitySet="Question_Bank_Table">
-          <ScalarProperty Name="TechnologyId" ColumnName="TechnologyId" />
-          <ScalarProperty Name="DomainId" ColumnName="DomainId" />
-          <ScalarProperty Name="CorrectAnswer" ColumnName="CorrectAnswer" />
-          <ScalarProperty Name="Options" ColumnName="Options" />
-          <ScalarProperty Name="Question" ColumnName="Question" />
-          <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Test_Table">
-      <EntityTypeMapping TypeName="PostModel.Test_Table">
-        <MappingFragment StoreEntitySet="Test_Table">
-          <ScalarProperty Name="TechnologyID" ColumnName="TechnologyID" />
-          <ScalarProperty Name="DomainID" ColumnName="DomainID" />
-          <ScalarProperty Name="Score" ColumnName="Score" />
-          <ScalarProperty Name="SelectedOptions" ColumnName="SelectedOptions" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="TestId" ColumnName="TestId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

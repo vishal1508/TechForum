@@ -2,6 +2,10 @@
 
 @{
     ViewBag.Title = "Create";
+    if (ViewBag.TechnologyList == null)
+    {
+        ViewBag.TechnologyList = new SelectList(" ");
+    }
 }
 
 <h2>Submit an Article</h2>
@@ -34,7 +38,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Post.technology, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Post.technology, new SelectList(" "), "-- Select Technology --", new { @class = "form-control", @id = "tid" })
+                @Html.DropDownListFor(model => model.Post.technology, ViewBag.TechnologyList as SelectList, "-- Select Technology --", new { @class = "form-control", @id = "tid" })
                 @Html.ValidationMessageFor(model => model.Post.technology, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -77,11 +81,12 @@
 
 <script>
     $(document).ready(function () {
-        $("#tid").focus(function () {
+        $("#did").click(function () {
 
             $.get("/Post/GetTechList", { did: $("#did").val() }, function (data) {
 
                 $("#tid").empty();
+                $("#tid").append("<option selected disabled=true>-- Select Technology --</option>")
                 $.each(data, function (index, row) {
 
                     $("#tid").append("<option value='" + row.tid + "'>" + row.technology + "</option>")

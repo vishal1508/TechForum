@@ -5,8 +5,6 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="PostModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Domain_Table">
           <Key>
             <PropertyRef Name="did" />
@@ -30,17 +28,6 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
           <Property Name="category" Type="bit" Nullable="false" />
           <Property Name="userid" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="Question_Bank_Table">
-          <Key>
-            <PropertyRef Name="QuestionID" />
-          </Key>
-          <Property Name="QuestionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Question" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Options" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="CorrectAnswer" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="DomainId" Type="int" Nullable="false" />
-          <Property Name="TechnologyId" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Subscriber_Table">
           <Key>
             <PropertyRef Name="userid" />
@@ -54,6 +41,7 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
           <Property Name="description" Type="nvarchar(max)" />
           <Property Name="IsEmailVerified" Type="bit" Nullable="false" />
           <Property Name="ActivationCode" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ResetPasswordCode" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="Technology_Table">
           <Key>
@@ -63,77 +51,6 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
           <Property Name="technology" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="did" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="Test_Table">
-          <Key>
-            <PropertyRef Name="TestId" />
-          </Key>
-          <Property Name="TestId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserId" Type="nvarchar" MaxLength="50" />
-          <Property Name="SelectedOptions" Type="nvarchar" MaxLength="200" Nullable="false" />
-          <Property Name="Score" Type="int" Nullable="false" />
-          <Property Name="DomainID" Type="int" Nullable="false" />
-          <Property Name="TechnologyID" Type="int" Nullable="false" />
-        </EntityType>
-        <Association Name="FK__Question___Domai__59FA5E80">
-          <End Role="Domain_Table" Type="Self.Domain_Table" Multiplicity="1" />
-          <End Role="Question_Bank_Table" Type="Self.Question_Bank_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Domain_Table">
-              <PropertyRef Name="did" />
-            </Principal>
-            <Dependent Role="Question_Bank_Table">
-              <PropertyRef Name="DomainId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Question___Techn__5AEE82B9">
-          <End Role="Technology_Table" Type="Self.Technology_Table" Multiplicity="1" />
-          <End Role="Question_Bank_Table" Type="Self.Question_Bank_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Technology_Table">
-              <PropertyRef Name="tid" />
-            </Principal>
-            <Dependent Role="Question_Bank_Table">
-              <PropertyRef Name="TechnologyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Test_Tabl__Domai__59063A47">
-          <End Role="Domain_Table" Type="Self.Domain_Table" Multiplicity="1" />
-          <End Role="Test_Table" Type="Self.Test_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Domain_Table">
-              <PropertyRef Name="did" />
-            </Principal>
-            <Dependent Role="Test_Table">
-              <PropertyRef Name="DomainID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Test_Tabl__Techn__571DF1D5">
-          <End Role="Technology_Table" Type="Self.Technology_Table" Multiplicity="1" />
-          <End Role="Test_Table" Type="Self.Test_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Technology_Table">
-              <PropertyRef Name="tid" />
-            </Principal>
-            <Dependent Role="Test_Table">
-              <PropertyRef Name="TechnologyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Test_Tabl__UserI__5CD6CB2B">
-          <End Role="Subscriber_Table" Type="Self.Subscriber_Table" Multiplicity="0..1" />
-          <End Role="Test_Table" Type="Self.Test_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subscriber_Table">
-              <PropertyRef Name="userid" />
-            </Principal>
-            <Dependent Role="Test_Table">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Post_Table_Post_Table">
           <End Role="Subscriber_Table" Type="Self.Subscriber_Table" Multiplicity="1" />
           <End Role="Post_Table" Type="Self.Post_Table" Multiplicity="*" />
@@ -161,30 +78,8 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
         <EntityContainer Name="PostModelStoreContainer">
           <EntitySet Name="Domain_Table" EntityType="Self.Domain_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Post_Table" EntityType="Self.Post_Table" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Question_Bank_Table" EntityType="Self.Question_Bank_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subscriber_Table" EntityType="Self.Subscriber_Table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Technology_Table" EntityType="Self.Technology_Table" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Test_Table" EntityType="Self.Test_Table" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Question___Domai__59FA5E80" Association="Self.FK__Question___Domai__59FA5E80">
-            <End Role="Domain_Table" EntitySet="Domain_Table" />
-            <End Role="Question_Bank_Table" EntitySet="Question_Bank_Table" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Question___Techn__5AEE82B9" Association="Self.FK__Question___Techn__5AEE82B9">
-            <End Role="Technology_Table" EntitySet="Technology_Table" />
-            <End Role="Question_Bank_Table" EntitySet="Question_Bank_Table" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Test_Tabl__Domai__59063A47" Association="Self.FK__Test_Tabl__Domai__59063A47">
-            <End Role="Domain_Table" EntitySet="Domain_Table" />
-            <End Role="Test_Table" EntitySet="Test_Table" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Test_Tabl__Techn__571DF1D5" Association="Self.FK__Test_Tabl__Techn__571DF1D5">
-            <End Role="Technology_Table" EntitySet="Technology_Table" />
-            <End Role="Test_Table" EntitySet="Test_Table" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Test_Tabl__UserI__5CD6CB2B" Association="Self.FK__Test_Tabl__UserI__5CD6CB2B">
-            <End Role="Subscriber_Table" EntitySet="Subscriber_Table" />
-            <End Role="Test_Table" EntitySet="Test_Table" />
-          </AssociationSet>
           <AssociationSet Name="FK_Post_Table_Post_Table" Association="Self.FK_Post_Table_Post_Table">
             <End Role="Subscriber_Table" EntitySet="Subscriber_Table" />
             <End Role="Post_Table" EntitySet="Post_Table" />
@@ -211,28 +106,6 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
             <End Role="Subscriber_Table" EntitySet="Subscriber_Table" />
             <End Role="Post_Table" EntitySet="Post_Table" />
           </AssociationSet>
-          <EntitySet Name="Question_Bank_Table" EntityType="PostModel.Question_Bank_Table" />
-          <AssociationSet Name="FK__Question___Domai__59FA5E80" Association="PostModel.FK__Question___Domai__59FA5E80">
-            <End Role="Domain_Table" EntitySet="Domain_Table" />
-            <End Role="Question_Bank_Table" EntitySet="Question_Bank_Table" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Question___Techn__5AEE82B9" Association="PostModel.FK__Question___Techn__5AEE82B9">
-            <End Role="Technology_Table" EntitySet="Technology_Table" />
-            <End Role="Question_Bank_Table" EntitySet="Question_Bank_Table" />
-          </AssociationSet>
-          <EntitySet Name="Test_Table" EntityType="PostModel.Test_Table" />
-          <AssociationSet Name="FK__Test_Tabl__Domai__59063A47" Association="PostModel.FK__Test_Tabl__Domai__59063A47">
-            <End Role="Domain_Table" EntitySet="Domain_Table" />
-            <End Role="Test_Table" EntitySet="Test_Table" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Test_Tabl__UserI__5CD6CB2B" Association="PostModel.FK__Test_Tabl__UserI__5CD6CB2B">
-            <End Role="Subscriber_Table" EntitySet="Subscriber_Table" />
-            <End Role="Test_Table" EntitySet="Test_Table" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Test_Tabl__Techn__571DF1D5" Association="PostModel.FK__Test_Tabl__Techn__571DF1D5">
-            <End Role="Technology_Table" EntitySet="Technology_Table" />
-            <End Role="Test_Table" EntitySet="Test_Table" />
-          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Domain_Table">
           <Key>
@@ -241,8 +114,6 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
           <Property Name="did" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="domain" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Technology_Table" Relationship="PostModel.FK_Technology_Table_Domain_Table" FromRole="Domain_Table" ToRole="Technology_Table" />
-          <NavigationProperty Name="Question_Bank_Table" Relationship="PostModel.FK__Question___Domai__59FA5E80" FromRole="Domain_Table" ToRole="Question_Bank_Table" />
-          <NavigationProperty Name="Test_Table" Relationship="PostModel.FK__Test_Tabl__Domai__59063A47" FromRole="Domain_Table" ToRole="Test_Table" />
           </EntityType>
         <EntityType Name="Technology_Table">
           <Key>
@@ -252,8 +123,6 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
           <Property Name="technology" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="did" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Domain_Table" Relationship="PostModel.FK_Technology_Table_Domain_Table" FromRole="Technology_Table" ToRole="Domain_Table" />
-          <NavigationProperty Name="Question_Bank_Table" Relationship="PostModel.FK__Question___Techn__5AEE82B9" FromRole="Technology_Table" ToRole="Question_Bank_Table" />
-          <NavigationProperty Name="Test_Table" Relationship="PostModel.FK__Test_Tabl__Techn__571DF1D5" FromRole="Technology_Table" ToRole="Test_Table" />
         </EntityType>
         <Association Name="FK_Technology_Table_Domain_Table">
           <End Type="PostModel.Domain_Table" Role="Domain_Table" Multiplicity="1" />
@@ -281,7 +150,7 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
           <Property Name="IsEmailVerified" Type="Boolean" Nullable="false" />
           <Property Name="ActivationCode" Type="Guid" Nullable="false" />
           <NavigationProperty Name="Post_Table" Relationship="PostModel.FK_Post_Table_Post_Table" FromRole="Subscriber_Table" ToRole="Post_Table" />
-          <NavigationProperty Name="Test_Table" Relationship="PostModel.FK__Test_Tabl__UserI__5CD6CB2B" FromRole="Subscriber_Table" ToRole="Test_Table" />
+          <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Post_Table">
           <Key>
@@ -312,93 +181,6 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Question_Bank_Table">
-          <Key>
-            <PropertyRef Name="QuestionID" />
-          </Key>
-          <Property Name="QuestionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Question" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Options" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CorrectAnswer" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="DomainId" Type="Int32" Nullable="false" />
-          <Property Name="TechnologyId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Domain_Table" Relationship="PostModel.FK__Question___Domai__59FA5E80" FromRole="Question_Bank_Table" ToRole="Domain_Table" />
-          <NavigationProperty Name="Technology_Table" Relationship="PostModel.FK__Question___Techn__5AEE82B9" FromRole="Question_Bank_Table" ToRole="Technology_Table" />
-        </EntityType>
-        <Association Name="FK__Question___Domai__59FA5E80">
-          <End Type="PostModel.Domain_Table" Role="Domain_Table" Multiplicity="1" />
-          <End Type="PostModel.Question_Bank_Table" Role="Question_Bank_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Domain_Table">
-              <PropertyRef Name="did" />
-            </Principal>
-            <Dependent Role="Question_Bank_Table">
-              <PropertyRef Name="DomainId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Question___Techn__5AEE82B9">
-          <End Type="PostModel.Technology_Table" Role="Technology_Table" Multiplicity="1" />
-          <End Type="PostModel.Question_Bank_Table" Role="Question_Bank_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Technology_Table">
-              <PropertyRef Name="tid" />
-            </Principal>
-            <Dependent Role="Question_Bank_Table">
-              <PropertyRef Name="TechnologyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Test_Table">
-          <Key>
-            <PropertyRef Name="TestId" />
-          </Key>
-          <Property Name="TestId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SelectedOptions" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Score" Type="Int32" Nullable="false" />
-          <Property Name="DomainID" Type="Int32" Nullable="false" />
-          <Property Name="TechnologyID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Domain_Table" Relationship="PostModel.FK__Test_Tabl__Domai__59063A47" FromRole="Test_Table" ToRole="Domain_Table" />
-          <NavigationProperty Name="Subscriber_Table" Relationship="PostModel.FK__Test_Tabl__UserI__5CD6CB2B" FromRole="Test_Table" ToRole="Subscriber_Table" />
-          <NavigationProperty Name="Technology_Table" Relationship="PostModel.FK__Test_Tabl__Techn__571DF1D5" FromRole="Test_Table" ToRole="Technology_Table" />
-        </EntityType>
-        <Association Name="FK__Test_Tabl__Domai__59063A47">
-          <End Type="PostModel.Domain_Table" Role="Domain_Table" Multiplicity="1" />
-          <End Type="PostModel.Test_Table" Role="Test_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Domain_Table">
-              <PropertyRef Name="did" />
-            </Principal>
-            <Dependent Role="Test_Table">
-              <PropertyRef Name="DomainID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Test_Tabl__UserI__5CD6CB2B">
-          <End Type="PostModel.Subscriber_Table" Role="Subscriber_Table" Multiplicity="0..1" />
-          <End Type="PostModel.Test_Table" Role="Test_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Subscriber_Table">
-              <PropertyRef Name="userid" />
-            </Principal>
-            <Dependent Role="Test_Table">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Test_Tabl__Techn__571DF1D5">
-          <End Type="PostModel.Technology_Table" Role="Technology_Table" Multiplicity="1" />
-          <End Type="PostModel.Test_Table" Role="Test_Table" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Technology_Table">
-              <PropertyRef Name="tid" />
-            </Principal>
-            <Dependent Role="Test_Table">
-              <PropertyRef Name="TechnologyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -425,6 +207,7 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
           <EntitySetMapping Name="Subscriber_Table">
             <EntityTypeMapping TypeName="PostModel.Subscriber_Table">
               <MappingFragment StoreEntitySet="Subscriber_Table">
+                <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
                 <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
                 <ScalarProperty Name="IsEmailVerified" ColumnName="IsEmailVerified" />
                 <ScalarProperty Name="description" ColumnName="description" />
@@ -451,30 +234,6 @@ warning 6002: The table/view 'techforumdb.dbo.Admin_Table' does not have a prima
                 <ScalarProperty Name="domain" ColumnName="domain" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="postid" ColumnName="postid" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Question_Bank_Table">
-            <EntityTypeMapping TypeName="PostModel.Question_Bank_Table">
-              <MappingFragment StoreEntitySet="Question_Bank_Table">
-                <ScalarProperty Name="TechnologyId" ColumnName="TechnologyId" />
-                <ScalarProperty Name="DomainId" ColumnName="DomainId" />
-                <ScalarProperty Name="CorrectAnswer" ColumnName="CorrectAnswer" />
-                <ScalarProperty Name="Options" ColumnName="Options" />
-                <ScalarProperty Name="Question" ColumnName="Question" />
-                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Test_Table">
-            <EntityTypeMapping TypeName="PostModel.Test_Table">
-              <MappingFragment StoreEntitySet="Test_Table">
-                <ScalarProperty Name="TechnologyID" ColumnName="TechnologyID" />
-                <ScalarProperty Name="DomainID" ColumnName="DomainID" />
-                <ScalarProperty Name="Score" ColumnName="Score" />
-                <ScalarProperty Name="SelectedOptions" ColumnName="SelectedOptions" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="TestId" ColumnName="TestId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

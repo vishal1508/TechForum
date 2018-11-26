@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Tech_ForumModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Domain_Table">
+          <Key>
+            <PropertyRef Name="did" />
+          </Key>
+          <Property Name="did" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="domain" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Technology_Table">
+          <Key>
+            <PropertyRef Name="tid" />
+          </Key>
+          <Property Name="tid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="technology" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="did" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Technology_Table_Domain_Table">
+          <End Role="Domain_Table" Type="Self.Domain_Table" Multiplicity="1" />
+          <End Role="Technology_Table" Type="Self.Technology_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Domain_Table">
+              <PropertyRef Name="did" />
+            </Principal>
+            <Dependent Role="Technology_Table">
+              <PropertyRef Name="did" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Tech_ForumModelStoreContainer">
+          <EntitySet Name="Domain_Table" EntityType="Self.Domain_Table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Technology_Table" EntityType="Self.Technology_Table" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Technology_Table_Domain_Table" Association="Self.FK_Technology_Table_Domain_Table">
+            <End Role="Domain_Table" EntitySet="Domain_Table" />
+            <End Role="Technology_Table" EntitySet="Technology_Table" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Tech_ForumModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Domain_Table">
+          <Key>
+            <PropertyRef Name="did" />
+          </Key>
+          <Property Name="did" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="domain" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Technology_Table" Relationship="Self.FK_Technology_Table_Domain_Table" FromRole="Domain_Table" ToRole="Technology_Table" />
+        </EntityType>
+        <EntityType Name="Technology_Table">
+          <Key>
+            <PropertyRef Name="tid" />
+          </Key>
+          <Property Name="tid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="technology" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="did" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Domain_Table" Relationship="Self.FK_Technology_Table_Domain_Table" FromRole="Technology_Table" ToRole="Domain_Table" />
+        </EntityType>
+        <Association Name="FK_Technology_Table_Domain_Table">
+          <End Role="Domain_Table" Type="Self.Domain_Table" Multiplicity="1" />
+          <End Role="Technology_Table" Type="Self.Technology_Table" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Domain_Table">
+              <PropertyRef Name="did" />
+            </Principal>
+            <Dependent Role="Technology_Table">
+              <PropertyRef Name="did" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DomainTechEntity" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Domain_Table" EntityType="Self.Domain_Table" />
+          <EntitySet Name="Technology_Table" EntityType="Self.Technology_Table" />
+          <AssociationSet Name="FK_Technology_Table_Domain_Table" Association="Self.FK_Technology_Table_Domain_Table">
+            <End Role="Domain_Table" EntitySet="Domain_Table" />
+            <End Role="Technology_Table" EntitySet="Technology_Table" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Tech_ForumModelStoreContainer" CdmEntityContainer="DomainTechEntity">
+          <EntitySetMapping Name="Domain_Table">
+            <EntityTypeMapping TypeName="Tech_ForumModel.Domain_Table">
+              <MappingFragment StoreEntitySet="Domain_Table">
+                <ScalarProperty Name="did" ColumnName="did" />
+                <ScalarProperty Name="domain" ColumnName="domain" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Technology_Table">
+            <EntityTypeMapping TypeName="Tech_ForumModel.Technology_Table">
+              <MappingFragment StoreEntitySet="Technology_Table">
+                <ScalarProperty Name="tid" ColumnName="tid" />
+                <ScalarProperty Name="technology" ColumnName="technology" />
+                <ScalarProperty Name="did" ColumnName="did" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

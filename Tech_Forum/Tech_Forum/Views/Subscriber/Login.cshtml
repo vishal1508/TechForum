@@ -52,10 +52,19 @@
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Not a User? Register", "Registration","Subscriber")
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            @Html.ActionLink("Not a User? Register", "Registration", "Subscriber")
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+            @Html.ActionLink("Forgot Password?", "ForgotPassword", "Subscriber")
+        </div>
+    </div>
 </div>
+
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

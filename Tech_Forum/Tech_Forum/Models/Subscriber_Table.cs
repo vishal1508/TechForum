@@ -18,7 +18,6 @@ namespace Tech_Forum.Models
         public Subscriber_Table()
         {
             this.Post_Table = new HashSet<Post_Table>();
-            this.Test_Table = new HashSet<Test_Table>();
         }
     
         public string userid { get; set; }
@@ -30,10 +29,9 @@ namespace Tech_Forum.Models
         public string description { get; set; }
         public bool IsEmailVerified { get; set; }
         public System.Guid ActivationCode { get; set; }
+        public string ResetPasswordCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Post_Table> Post_Table { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Test_Table> Test_Table { get; set; }
     }
 }

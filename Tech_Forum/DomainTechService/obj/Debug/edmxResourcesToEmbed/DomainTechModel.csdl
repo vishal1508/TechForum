@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Tech_ForumModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Domain_Table">
+    <Key>
+      <PropertyRef Name="did" />
+    </Key>
+    <Property Name="did" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="domain" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Technology_Table" Relationship="Self.FK_Technology_Table_Domain_Table" FromRole="Domain_Table" ToRole="Technology_Table" />
+  </EntityType>
+  <EntityType Name="Technology_Table">
+    <Key>
+      <PropertyRef Name="tid" />
+    </Key>
+    <Property Name="tid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="technology" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="did" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Domain_Table" Relationship="Self.FK_Technology_Table_Domain_Table" FromRole="Technology_Table" ToRole="Domain_Table" />
+  </EntityType>
+  <Association Name="FK_Technology_Table_Domain_Table">
+    <End Role="Domain_Table" Type="Self.Domain_Table" Multiplicity="1" />
+    <End Role="Technology_Table" Type="Self.Technology_Table" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Domain_Table">
+        <PropertyRef Name="did" />
+      </Principal>
+      <Dependent Role="Technology_Table">
+        <PropertyRef Name="did" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DomainTechEntity" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Domain_Table" EntityType="Self.Domain_Table" />
+    <EntitySet Name="Technology_Table" EntityType="Self.Technology_Table" />
+    <AssociationSet Name="FK_Technology_Table_Domain_Table" Association="Self.FK_Technology_Table_Domain_Table">
+      <End Role="Domain_Table" EntitySet="Domain_Table" />
+      <End Role="Technology_Table" EntitySet="Technology_Table" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

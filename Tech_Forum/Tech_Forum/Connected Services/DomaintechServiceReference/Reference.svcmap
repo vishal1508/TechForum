@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="bedc32ce-83c0-4307-a4b8-dc279ee5b56f" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:52551/DomainTechService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="DomainTechService.disco" MetadataType="Disco" ID="2c917a9e-2298-4d3e-9bcb-5b486edcb81d" SourceId="1" SourceUrl="http://localhost:52551/DomainTechService.svc?disco" />
+    <MetadataFile FileName="DomainTechService.wsdl" MetadataType="Wsdl" ID="d196c0c2-c557-409d-a6e1-53d3838f0148" SourceId="1" SourceUrl="http://localhost:52551/DomainTechService.svc?wsdl" />
+    <MetadataFile FileName="DomainTechService.xsd" MetadataType="Schema" ID="17553866-46e0-4708-a671-75f7691b012a" SourceId="1" SourceUrl="http://localhost:52551/DomainTechService.svc?xsd=xsd2" />
+    <MetadataFile FileName="DomainTechService1.xsd" MetadataType="Schema" ID="8b7b7762-89c3-498a-852b-a249cb241629" SourceId="1" SourceUrl="http://localhost:52551/DomainTechService.svc?xsd=xsd0" />
+    <MetadataFile FileName="DomainTechService2.xsd" MetadataType="Schema" ID="40078275-b109-4d61-b293-b4cc08e412af" SourceId="1" SourceUrl="http://localhost:52551/DomainTechService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
