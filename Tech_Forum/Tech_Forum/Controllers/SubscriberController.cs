@@ -261,7 +261,7 @@ namespace Tech_Forum.Controllers
                     pe.SaveChanges();
           
                 }
-                return View("../Post/ResultView");
+                return View("../Post/ArticleResultView");
             }
             catch(Exception e)
             {
@@ -320,7 +320,7 @@ namespace Tech_Forum.Controllers
                     article.comments = JsonConvert.DeserializeObject<List<Comment>>(post.comments);
                 }
                 ViewData["ArticleComments"] = article;
-                return View("../Post/ResultView");
+                return View("../Post/ArticleResultView");
             }
              
         }

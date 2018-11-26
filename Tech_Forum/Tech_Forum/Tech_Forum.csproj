@@ -282,7 +282,7 @@
     <Content Include="Views\Subscriber\Registration.cshtml" />
     <Content Include="Views\Subscriber\VerifyAccount.cshtml" />
     <Content Include="Views\Subscriber\Login.cshtml" />
-    <Content Include="Views\Post\ResultView.cshtml" />
+    <Content Include="Views\Post\ArticleResultView.cshtml" />
     <Content Include="Views\Subscriber\ManageUser.cshtml" />
     <Content Include="Views\Subscriber\EditPost.cshtml" />
     <Content Include="Views\Subscriber\DeletePost.cshtml" />
@@ -295,6 +295,7 @@
     <Content Include="Views\Admin\GenerateOverallReport.cshtml" />
     <Content Include="Views\Admin\GenerateTestReport.cshtml" />
     <Content Include="Views\Admin\GenerateUserReport.cshtml" />
+    <Content Include="Views\Blog\BlogResultView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,306 @@
+﻿@using Tech_Forum.Models
+@model Tech_Forum.Models.PostParentModel
+@{
+    var article = (Post_Table)ViewData["Article"];
+
+    var blog = (Post_Table)ViewData["Blog"];
+
+    var searchresult = (IEnumerable<Post_Table>)ViewData["searchlist"];
+
+    var articleComments = (Article)ViewData["ArticleComments"];
+    var blogComments = (Blog)ViewData["BlogComments"];
+
+    var postId = 0;
+
+    if (article == null)
+    {
+        postId = blog.postid;
+    }
+    else
+    {
+        postId = article.postid;
+    }
+}
+
+<style>
+    .rate {
+        height: 35px;
+    }
+
+        .rate:not(:checked) > input {
+            position: absolute;
+            top: -9999px;
+        }
+
+        .rate:not(:checked) > label {
+            float: right;
+            width: 1em;
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 30px;
+            color: #ccc;
+        }
+
+            .rate:not(:checked) > label:before {
+                content: '★ ';
+            }
+
+        .rate > input:checked ~ label {
+            color: #ffc700;
+        }
+
+        .rate:not(:checked) > label:hover,
+        .rate:not(:checked) > label:hover ~ label {
+            color: #deb217;
+        }
+
+        .rate > input:checked + label:hover,
+        .rate > input:checked + label:hover ~ label,
+        .rate > input:checked ~ label:hover,
+        .rate > input:checked ~ label:hover ~ label,
+        .rate > label:hover ~ input:checked ~ label {
+            color: #c59b08;
+        }
+
+
+    .commentDiv {
+        width: 200px;
+        border-bottom: white;
+        border-bottom-style: solid;
+        margin-left: 0px;
+    }
+
+    .commentTextBox {
+        resize: none;
+    }
+
+    .commentButton {
+        margin-top: 10px;
+        height: 30px;
+    }
+
+    .postCommentDiv {
+        width: 280px;
+        height: auto;
+        margin-left: 5px;
+        text-align: right;
+    }
+
+    textarea.form-control {
+        height: 50px;
+    }
+
+    a:not([href]):not([tabindex]) {
+        color: inherit;
+        text-decoration: underline;
+    }
+</style>
+
+<script>
+    function enableMainCommentButton(value) {
+        if (value != "") {
+            document.getElementById("mainCommentButton").disabled = false;
+        }
+
+        else if (value == "") {
+            document.getElementById("mainCommentButton").disabled = true;
+        }
+    }
+
+    function postComment(buttonId, margin) {
+        var mainCommentId = buttonId.substr(0, buttonId.indexOf('b'))
+        var mainCommentIdWithPrefix = "#" + mainCommentId;
+
+        var subCommentTextBox = document.createElement("textarea");
+        subCommentTextBox.id = "subCommentText";
+        subCommentTextBox.style.marginLeft = margin;
+        subCommentTextBox.className = "form-control";
+
+        var subCommentPostButton = document.createElement("button");
+        subCommentPostButton.style.marginLeft = margin;
+        subCommentPostButton.className = "btn btn-info";
+
+        var subCommentTextBoxId = subCommentTextBox.id;
+
+        subCommentPostButton.textContent = "Post Reply";
+        subCommentPostButton.onclick = function () {
+            var subCommentContent = document.getElementById(subCommentTextBoxId).value;
+
+            if (subCommentContent == "") {
+                alert("Put something atleast!");
+            }
+
+            else {
+                location.href = '@Url.Action("PostComment", "Post")?postId=' + @postId + '&commentId=' + mainCommentId + '&commentContent=' + subCommentContent;
+            }
+        };
+
+                $(mainCommentIdWithPrefix).append(subCommentTextBox);
+                $(mainCommentIdWithPrefix).append(subCommentPostButton);
+                }
+</script>
+
+@helper PopulateComment(Comment comment, int margin)
+{
+    PostEntity pe = new PostEntity();
+    var subscriber = pe.Subscriber_Table.Where(x => x.userid == comment.userid).FirstOrDefault();
+
+    string marginString = margin.ToString() + "px";
+    <div id="@comment.postid" class="container commentDiv" style="margin-left: @marginString">
+        <div class="row">
+            <p class="col-sm-12" style="margin-left: @marginString;"><strong>@subscriber.name</strong></p>
+        </div>
+        <div class="row">
+            <p style="margin-left: @marginString; background: lightgray">@comment.content_</p>
+        </div>
+        <div class="row">
+            @{String buttonId = comment.postid.ToString() + "b";}
+            <a id="@buttonId" class="replyCommentLink col-sm-3" onclick="postComment(this.id, '@marginString');" style="margin-left: @marginString;">Reply</a>
+        </div>
+    </div>
+
+    foreach (var item in comment.comments)
+    {
+        @PopulateComment(item, margin + 50);
+    }
+}
+
+@{
+    <br />
+    <div class="jumbotron text-center">
+        <h3>@article.title</h3>
+    </div>
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                By : <strong>@article.userid</strong>
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+                <div class="rate">
+                    <input type="radio" id="star5" name="rate" value="5" onclick="starfunc(this.id);" />
+                    <label for="star5" title="text">5 stars</label>
+                    <input type="radio" id="star4" name="rate" value="4" onclick="starfunc(this.id);" />
+                    <label for="star4" title="text">4 stars</label>
+                    <input type="radio" id="star3" name="rate" value="3" onclick="starfunc(this.id);" />
+                    <label for="star3" title="text">3 stars</label>
+                    <input type="radio" id="star2" name="rate" value="2" onclick="starfunc(this.id);" />
+                    <label for="star2" title="text">2 stars</label>
+                    <input type="radio" id="star1" name="rate" value="1" onclick="starfunc(this.id);" />
+                    <label for="star1" title="text">1 star</label>
+                </div>
+            </div>
+        </div>
+        <br /><br />
+        <div class="row">
+            <div class="col-md-4">
+                <h3 style="font-weight:bold">Content</h3>
+            </div>
+        </div>
+        <br />
+        <p style="text-align:justify">@article.content_</p>
+    </div>
+
+    <h2>Comments: </h2>
+    if (articleComments != null)
+    {
+        int margin = 0;
+        string marginString = margin.ToString() + "px";
+        foreach (var item in articleComments.comments)
+        {
+            <div id="@item.postid" class="container commentDiv" style="margin-left:@marginString">
+                <div class="row">
+                    @{PostEntity pe = new PostEntity();
+                        var subscriber = pe.Subscriber_Table.Where(x => x.userid == item.userid).FirstOrDefault();
+                    }
+                    <p style="margin-left: @marginString;"><strong>@subscriber.name</strong></p>
+                </div>
+                <div class="row">
+                    <p style="margin-left: @marginString; background: lightgray">@Html.DisplayFor(model => item.content_)</p>
+                </div>
+                <div class="row col-sm-3">
+                    @{String buttonId = item.postid.ToString() + "b";}
+                    <a id="@buttonId" class="replyCommentLink" onclick="postComment(this.id);" style="margin-left: @marginString;">Reply</a>
+                </div>
+            </div>
+
+            foreach (var comment in item.comments)
+            {
+                @PopulateComment(comment, margin + 50)
+            }
+        }
+    }
+
+    using (Html.BeginForm("PostComment", "Post", new { postId = article.postid }))
+    {
+        <div class="postCommentDiv row">
+            @Html.TextAreaFor(model => model.comment.content_, new { @class = "form-control commentTextBox col-sm-8", id = "mainCommentTextBox", onkeypress = "enableMainCommentButton(this.value)", required = true, oninvalid = "this.setCustomValidity('Put something atleast')", oninput = "this.setCustomValidity('')" })
+            <button id="mainCommentButton" class="btn btn-outline-secondary commentButton col-sm-4">Comment</button>
+        </div>
+    }
+}
+
+@if (searchresult != null)
+{
+    <div class="jumbotron container-fluid text-center">
+        <h3>Search Results</h3>
+    </div>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Title")
+            </th>
+            <th>
+                @Html.DisplayName("Domain")
+            </th>
+            <th>
+                @Html.DisplayName("Technology")
+            </th>
+            <th>
+                @Html.DisplayName("Author")
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in searchresult)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.title, "../Subscriber/Details", new { id = item.postid })
+                </td>
+                <td>
+                    @Html.DisplayName(item.domain)
+                </td>
+                <td>
+                    <p>@item.technology</p>
+                </td>
+                <td>
+                    @Html.DisplayName(item.userid)
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+@if (ViewBag.SearchMessage != null)
+{
+    <div class="text-center alert alert-danger">
+        <strong>Sorry! </strong>@ViewBag.SearchMessage
+    </div>
+
+}
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    function starfunc(id) {
+        var value = $("#"+id).val();
+        location.href = '@Url.Action("CalculateStar","Post")?rate=' + value;
+    }
+</script>

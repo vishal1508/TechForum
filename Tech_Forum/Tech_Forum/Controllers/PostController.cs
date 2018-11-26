@@ -134,7 +134,7 @@ namespace Tech_Forum.Controllers
                         pe.Post_Table.Add(post);
                         pe.SaveChanges();
                         
-                        return View("ResultView");
+                        return View("ArticleResultView");
                     }  
                 }
             }
@@ -144,7 +144,7 @@ namespace Tech_Forum.Controllers
             }
         }
 
-        public ActionResult PostComment(Post_Table postTable, Comment comment, Article article, Blog blog, string postId, string commentId, string commentContent)
+        public ActionResult PostComment(Post_Table postTable, Comment comment, Article article, string postId, string commentId, string commentContent)
         {
             try
             {
@@ -154,104 +154,56 @@ namespace Tech_Forum.Controllers
 
                     var post = pe.Post_Table.Where(x => x.postid == postIdInt).FirstOrDefault();
 
-                    if (post.category)
+                    if (post.comments != null)
                     {
-                        if (post.comments != null)
-                        {
-                            article.comments = JsonConvert.DeserializeObject<List<Comment>>(post.comments);
-                        }
-
-                        ViewData["Article"] = post;
-                        ViewData["ArticleComments"] = article;
-
-                        comment.userid = Session["userid"].ToString();
-                        comment.date = DateTime.Now;
-
-                        if (commentContent == null)
-                        {
-                            if (comment.content_ != null)
-                            {
-                                if (article.comments.Count() < 10)
-                                {
-                                    comment.postid = "0" + (article.comments.Count() + 1);
-                                }
-                                else
-                                {
-                                    comment.postid = (article.comments.Count() + 1).ToString();
-                                }
-                                article.comments.Add(comment);
-                            }
-
-                            else
-                            {
-                                ViewData["EmptyComment"] = "Put something atleast!";
-                                return View("ResultView");
-                            }
-                        }
-
-                        else if (commentContent != null)
-                        {
-                            var foundParentComment = false;
-                            while (!foundParentComment)
-                            {
-                                foundParentComment = AddCommentToParentComment(article.comments, commentId, commentContent);
-                            }
-                        }
-
-                        var jsonCommentList = JsonConvert.SerializeObject(article.comments);
-
-                        post.comments = jsonCommentList;
-
-                        pe.Post_Table.AddOrUpdate(post);
-                        pe.SaveChanges();
-
-                        return View("ResultView");
+                        article.comments = JsonConvert.DeserializeObject<List<Comment>>(post.comments);
                     }
 
-                    else
+                    ViewData["Article"] = post;
+                    ViewData["ArticleComments"] = article;
+
+                    comment.userid = Session["userid"].ToString();
+                    comment.date = DateTime.Now;
+
+                    if (commentContent == null)
                     {
-                        if (post.comments != null)
+                        if (comment.content_ != null)
                         {
-                            blog.comments = JsonConvert.DeserializeObject<List<Comment>>(post.comments);
-                        }
-
-                        ViewData["Blog"] = post;
-                        ViewData["BlogComments"] = blog;
-
-                        comment.userid = Session["userid"].ToString();
-                        comment.date = DateTime.Now;
-
-                        if (commentContent == null)
-                        {
-                            if (blog.comments.Count() < 10)
+                            if (article.comments.Count() < 10)
                             {
-                                comment.postid = "0" + (blog.comments.Count() + 1);
+                                comment.postid = "0" + (article.comments.Count() + 1);
                             }
                             else
                             {
-                                comment.postid = (blog.comments.Count() + 1).ToString();
+                                comment.postid = (article.comments.Count() + 1).ToString();
                             }
-                            blog.comments.Add(comment);
+                            article.comments.Add(comment);
                         }
 
-                        else if (commentContent != null)
+                        else
                         {
-                            var foundParentComment = false;
-                            while (!foundParentComment)
-                            {
-                                foundParentComment = AddCommentToParentComment(blog.comments, commentId, commentContent);
-                            }
+                            ViewData["EmptyComment"] = "Put something atleast!";
+                            return View("ArticleResultView");
                         }
-
-                        var jsonCommentList = JsonConvert.SerializeObject(blog.comments);
-
-                        post.comments = jsonCommentList;
-
-                        pe.Post_Table.AddOrUpdate(post);
-                        pe.SaveChanges();
-
-                        return View("ResultView");
                     }
+
+                    else if (commentContent != null)
+                    {
+                        var foundParentComment = false;
+                        while (!foundParentComment)
+                        {
+                            foundParentComment = AddCommentToParentComment(article.comments, commentId, commentContent);
+                        }
+                    }
+
+                    var jsonCommentList = JsonConvert.SerializeObject(article.comments);
+
+                    post.comments = jsonCommentList;
+
+                    pe.Post_Table.AddOrUpdate(post);
+                    pe.SaveChanges();
+
+                    return View("ArticleResultView");
                 }
             }
 
@@ -285,7 +237,7 @@ namespace Tech_Forum.Controllers
                     ViewBag.SearchMessage = "No results found";
                 }
             }
-            return View("ResultView");
+            return View("ArticleResultView");
         }
 
 
