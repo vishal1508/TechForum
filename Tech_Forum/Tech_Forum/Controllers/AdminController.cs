@@ -15,6 +15,30 @@ namespace Tech_Forum.Controllers
             return View();
         }
 
+        public ActionResult AdLogin(string userid, string password, string Login)
+        {
+           PostEntity tech = new PostEntity();
+            if ( Login!= null)
+            {
+                var loginquery = (from p in tech.Admin_Table
+                                  where p.Username == userid &&
+                                  p.Password == password
+                                  select new
+                                  {
+                                      userid = p.Username
+                                  }).ToList();
+                if (loginquery.Count > 0)
+                {
+                    return View("GenerateOverallReport");
+                }
+                else
+                {
+
+                    return View("Login", null, model: "Wrong credentials");
+                }
+            }
+            return View();
+        }
         public ActionResult GenerateOverallReport()
         {
             return View();
@@ -25,7 +49,7 @@ namespace Tech_Forum.Controllers
             return View();
         }
 
-        public ActionResult DomainSelect(string domlist, TestUser u, String show)
+        public ActionResult DomainSelect(string domlist, TestUser u, String show, string showtech, string technolist)
         {
             if (show != null)
             {
@@ -42,7 +66,8 @@ namespace Tech_Forum.Controllers
                                       Score = q.Score
 
                                   }).ToList();
-
+                Session["domainlist"] = domlist;
+                u.domainsession = Session["domainlist"].ToString();
                 List<QuestionBank> li = new List<QuestionBank>();
                 int i = 0;
                 foreach (var p in domainlist)
@@ -55,66 +80,124 @@ namespace Tech_Forum.Controllers
                     i++;
                 }
                 u.count = i;
-                return View("GenerateTestReport", u);
-            }
-            else
-                return View("GenerateTestReport");
-        }
+                var techlist = (from p in tec.Domain_Table
+                                join q in tec.Technology_Table
+                                on p.did equals q.did
+                                where p.domain == domlist
+                                select new
+                                {
+                                    Technology = q.technology
+                                }).ToList();
+                i = 0;
+                foreach (var p in techlist)
+                {
+                    u.Technologydroplist[i] = p.Technology;
+                    i++;
+                }
+                u.techcount = i;
 
-        public ActionResult GenerateTestReport(TestUser u, string answer, string inp, string answercat, string Search)
-        {
-            if (answercat != null)
-            {
-                int i = 0;
-                PostEntity tz = new PostEntity();
-                var domainvar = (from p in tz.Domain_Table
+
+                i = 0;
+
+                var domainvar = (from p in tec.Domain_Table
                                  select p.domain);
-                var count = (from p in tz.Domain_Table
+                var count = (from p in tec.Domain_Table
                              select p.domain).Count();
                 u.Domaincount = count;
                 foreach (var p in domainvar)
                 {
-                    u.Domainlist[i] = p;
+                    u.Domaindroplist[i] = p;
                     i++;
                 }
-                ViewBag.domainlistname = u.Domainlist;
-                return View(u);
-            }
+                return View("GenerateTestReport", u);
 
-            else if (Search != null)
+
+            }
+            else if (showtech != null)
             {
-                PostEntity te = new PostEntity();
-                int testid = Int32.Parse(inp);
-                var query = (from p in te.Test_Table
-                             join q in te.Domain_Table
-                             on p.DomainID equals q.did
-                             where p.TestId == testid
-                             select new
-                             {
-                                 TestID = p.TestId,
-                                 Domain = q.domain,
-                                 UserID = p.UserId,
-                                 Score = p.Score
-                             });
+                PostEntity tec = new PostEntity();
+                u.technologysession = technolist;
+                var techlist = (from p in tec.Technology_Table
+                                join q in tec.Test_Table
+                                on p.tid equals q.TechnologyID
+                                where p.technology == u.technologysession
+                                select new
+                                {
+                                    technology = p.technology,
+                                    UserID = q.UserId,
+                                    TestID = q.TestId,
+                                    Score = q.Score
+
+                                }).ToList();
+
+                List<QuestionBank> li = new List<QuestionBank>();
                 int i = 0;
-                foreach (var p in query)
+                foreach (var p in techlist)
                 {
-                    u.Domainlist[i] = p.Domain;
+
+                    u.Technologylist[i] = p.technology;
                     u.UserId[i] = p.UserID;
-                    u.Score[i] = p.Score;
                     u.TestId[i] = p.TestID;
+                    u.Score[i] = p.Score;
                     i++;
                 }
                 u.count = i;
 
-                return View(u);
-            }
-            else
-            {
-                return View();
-            }
-        }
+                i = 0;
 
+                var domainvar = (from p in tec.Domain_Table
+                                 select p.domain);
+                var count = (from p in tec.Domain_Table
+                             select p.domain).Count();
+                u.Domaincount = count;
+                foreach (var p in domainvar)
+                {
+                    u.Domaindroplist[i] = p;
+                    i++;
+                }
+                u.domainsession = Session["domainlist"].ToString();
+                var techdropdownlist = (from p in tec.Domain_Table
+                                        join q in tec.Technology_Table
+                                        on p.did equals q.did
+                                        where p.domain == u.domainsession
+                                        select new
+                                        {
+                                            Technology = q.technology
+                                        }).ToList();
+                i = 0;
+                foreach (var p in techdropdownlist)
+                {
+                    u.Technologydroplist[i] = p.Technology;
+                    i++;
+                }
+                u.techcount = i;
+
+                return View("GenerateTestReport", u);
+
+            }
+            return View("GenerateTestReport");
+        }
+        public ActionResult GenerateTestReport(TestUser u, string answer, string inp, string answercat, string Search)
+        {
+
+
+            int i = 0;
+            PostEntity tz = new PostEntity();
+            var domainvar = (from p in tz.Domain_Table
+                             select p.domain);
+            var count = (from p in tz.Domain_Table
+                         select p.domain).Count();
+            u.Domaincount = count;
+            foreach (var p in domainvar)
+            {
+                u.Domaindroplist[i] = p;
+                i++;
+            }
+            ViewBag.domainlistname = u.Domainlist;
+            return View(u);
+
+
+        }
         public ActionResult GenerateUserReport(string answer, string inp, Subscriber_Table si, Post_Table ai, TestUser u)
         {
             if (answer != null)
@@ -136,6 +219,7 @@ namespace Tech_Forum.Controllers
 
                                }).ToList();
                 int i = 0;
+                u.Name = inp;
                 foreach (var p in testsub)
                 {
 
@@ -143,7 +227,7 @@ namespace Tech_Forum.Controllers
                     u.UserId[i] = p.ID;
                     u.Score[i] = p.Score;
                     u.TestId[i] = p.TesTID;
-
+                 
                     if (u.Score[i] <= (0.4) * 10)
                     {
                         u.fail = u.fail + 1;
@@ -177,8 +261,15 @@ namespace Tech_Forum.Controllers
 
 
                     u.Title[i] = p.Title;
-                    u.Technology[i] = p.Technology;
-                    u.Ratings[i] = p.Rating.Value;
+                    u.Technologylist[i] = p.Technology;
+                    if (p.Rating != null)
+                    {
+                        u.Ratings[i] = p.Rating.Value;
+                    }
+                    else
+                    {
+                        u.Ratings[i] = 0;
+                    }
                     sum += u.Ratings[i];
                     i++;
                 }

@@ -1,0 +1,35 @@
+﻿@model string
+@{
+    ViewBag.Title = "AdLogin";
+}
+<style>
+    body {
+        background-image: url(../../images/blue.jpg);
+        background-repeat: no-repeat;
+        background-size: 8000px;
+    }
+</style>
+<div class="jumbotron" style="text-align:center;color:white">
+    <form action="AdLogin">
+        <h2>Login</h2>
+        <br />
+        Userid:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <input type="text" name="userid" />
+        <br />
+        <br />
+        Password:&nbsp;&nbsp; <input type="password" name="password" />
+        <br />
+        <br />
+        <input type="submit" class="btn btn-primary" name="Login" value="Login">
+
+
+
+        @if (Model != null)
+        {
+            <h3>@Model</h3>
+        }
+
+    </form>
+</div>
+
+
+
